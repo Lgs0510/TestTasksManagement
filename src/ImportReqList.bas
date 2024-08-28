@@ -1,0 +1,41 @@
+Attribute VB_Name = "ImportReqList"
+Option Explicit
+
+'--------------------------------------------------------
+'------------------- Private Sub -------------------
+'--------------------------------------------------------
+
+
+
+'-------------------------------Imports Main Requirements----------------------------
+'Sub Name:ImportMainReqs
+'Description: This Function is responsible for start the import of requirements for the Trace sheet
+'Inputs: ---
+'-----------------------------------------------------------------------------------
+Sub ImportMainReqs()
+    Dim csvReqs As CsvClass
+    Dim curTraceReqlist As New list
+    Dim LastRow As Integer
+    Dim curentRowNmb As Integer
+    Dim req As Variant
+    Dim protectStatus As Boolean
+    
+    protectStatus = ActiveSheet.ProtectContents
+    UnprotectSheet (protectStatus)
+    Set csvReqs = ImportCsvRequirements
+    ActiveWorkbook.Worksheets("Trace").Activate
+    LastRow = ActiveSheet.Range("A" & ActiveSheet.Rows.count).End(xlUp).Row
+    curTraceReqlist.letList = readTraceSheetReqs
+    For Each req In csvReqs.getReqListNO
+        If Not curTraceReqlist.Contains(Replace(req, "CV-", "")) Then
+            LastRow = Range("A" & Rows.count).End(xlUp).Row
+            Cells(LastRow + 1, CvNumberCN) = req
+            LastRow = LastRow + 1
+            curentRowNmb = LastRow
+        Else
+            curentRowNmb = curTraceReqlist.Find(req) + 2
+        End If
+        Cells(curentRowNmb, LinkedWorkItemsCN) = csvReqs.getReqLikedWkItems("CV-" + req)
+    Next
+    ProtectSheet (protectStatus)
+End Sub
