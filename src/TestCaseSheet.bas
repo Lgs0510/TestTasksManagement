@@ -41,7 +41,7 @@ Public Function updateTestCasesSheet_CvOnly(newTestCasesList As list, testCasesS
         newTestCasesList.Sort
         currentSheetName = ActiveSheet.Name
         ActiveWorkbook.Worksheets("TestCases").Activate
-        lastCellAddress = "A" + CStr(tCSLcopy.Size + 2) + ":A" + CStr(tCSLcopy.Size + 2 + newTestCasesList.Size)
+        lastCellAddress = "A" + CStr(tCSLcopy.Size + 2) + ":A" + CStr(tCSLcopy.Size + 1 + newTestCasesList.Size)
         Range(lastCellAddress).Select
         ActiveSheet.Unprotect
         Range(lastCellAddress).value = Application.Transpose(newTestCasesList.getList)
