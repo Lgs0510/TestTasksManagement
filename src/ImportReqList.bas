@@ -19,6 +19,7 @@ Sub ImportMainReqs()
     Dim curentRowNmb As Integer
     Dim req As Variant
     Dim protectStatus As Boolean
+    Dim overwriteAnswer As VbMsgBoxResult
     
     protectStatus = ActiveSheet.ProtectContents
     UnprotectSheet (protectStatus)
@@ -33,9 +34,20 @@ Sub ImportMainReqs()
             LastRow = LastRow + 1
             curentRowNmb = LastRow
         Else
-            curentRowNmb = curTraceReqlist.Find(req) + 2
+             overwriteAnswer = MsgBox("This requirement is already on the list!" + vbCrLf + "Do you want to update it?", vbYesNo, "WorkItem already Exist!")
+            If overwriteAnswer = vbYes Then
+                curentRowNmb = curTraceReqlist.Find(Replace(req, "CV-", "")) + 2
+                If sheetExist("CV-" + CStr(Replace(req, "CV-", ""))) Then
+                    Application.DisplayAlerts = False
+                    ActiveWorkbook.Worksheets("CV-" + CStr(Replace(req, "CV-", ""))).Delete
+                    Application.DisplayAlerts = True
+                End If
+            Else
+                curentRowNmb = curTraceReqlist.Find(req) + 2
+            End If
         End If
         Cells(curentRowNmb, LinkedWorkItemsCN) = csvReqs.getReqLikedWkItems("CV-" + req)
     Next
     ProtectSheet (protectStatus)
+    InitializeWorkBook.InitializeWorkBook
 End Sub
