@@ -1,0 +1,3 @@
+[submodule "VBA_prjExportImport"]
+	path = VBA_prjExportImport
+	url = git@github.com:Lgs0510/VBA_prjExportImport.git
