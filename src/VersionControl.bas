@@ -13,3 +13,18 @@ Sub exportCode()
     teste = Application.Run("testExport", projName, exportPath)
 
 End Sub
+Sub importExportImportCode()
+
+    projName = "vbaDeveloper"
+    importPath = File_op.getGenFolderPath
+    teste = Application.Run("testImport", projName, importPath)
+End Sub
+
+Sub exportExportImportCode()
+
+    projName = "vbaDeveloper"
+    exportPath = getGenFolderPath
+    teste = Application.Run("testExport", projName, exportPath)
+
+End Sub
+
