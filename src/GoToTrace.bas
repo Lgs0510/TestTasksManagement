@@ -13,7 +13,6 @@ Attribute VB_Name = "GoToTrace"
 '-----------------------------------------------------------------------------------
 Sub GoToTrace()
     ActiveWorkbook.Worksheets("Trace").Activate
-    Range("A2").Select
 End Sub
 
 
