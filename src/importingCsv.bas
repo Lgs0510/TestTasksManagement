@@ -33,7 +33,9 @@ Function ImportCsvRequirements() As CsvClass
                 csvTable.addLine (strLine)
             End If
         Loop
+        Set ImportCsvRequirements = csvTable
+    Else
+        Exit Function
     End If
-    Set ImportCsvRequirements = csvTable
 End Function
 

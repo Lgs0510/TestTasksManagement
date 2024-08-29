@@ -3,28 +3,34 @@ Sub importCode()
 
     projName = ThisWorkbook.VBProject.Name
     importPath = File_op.getGenFolderPath
-    teste = Application.Run("testImport", projName, importPath)
+    If importPath <> "" Then
+        teste = Application.Run("testImport", projName, importPath)
+    End If
 End Sub
 
 Sub exportCode()
 
     projName = ThisWorkbook.VBProject.Name
     exportPath = getGenFolderPath
-    teste = Application.Run("testExport", projName, exportPath)
-
+    If exportPath <> "" Then
+        teste = Application.Run("testExport", projName, exportPath)
+    End If
 End Sub
 Sub importExportImportCode()
 
     projName = "vbaDeveloper"
     importPath = File_op.getGenFolderPath
-    teste = Application.Run("testImport", projName, importPath)
+    If importPath <> "" Then
+        teste = Application.Run("testImport", projName, importPath)
+    End If
 End Sub
 
 Sub exportExportImportCode()
 
     projName = "vbaDeveloper"
     exportPath = getGenFolderPath
-    teste = Application.Run("testExport", projName, exportPath)
-
+    If exportPath <> "" Then
+        teste = Application.Run("testExport", projName, exportPath)
+    End If
 End Sub
 

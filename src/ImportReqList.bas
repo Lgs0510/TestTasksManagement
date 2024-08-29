@@ -24,6 +24,9 @@ Sub ImportMainReqs()
     protectStatus = ActiveSheet.ProtectContents
     UnprotectSheet (protectStatus)
     Set csvReqs = ImportCsvRequirements
+    If csvReqs Is Nothing Then
+        Exit Sub
+    End If
     ActiveWorkbook.Worksheets("Trace").Activate
     LastRow = ActiveSheet.Range("A" & ActiveSheet.Rows.count).End(xlUp).Row
     curTraceReqlist.letList = readTraceSheetReqs
