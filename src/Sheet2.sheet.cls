@@ -9,7 +9,7 @@ End Sub
 Private Sub Worksheet_Change(ByVal Target As Range)
     Application.EnableEvents = False
     protectionStatus = ActiveSheet.ProtectContents
-
+    
     For Each cell In Target
         If cell <> "" Then
             UnprotectSheet (protectionStatus)
@@ -17,8 +17,8 @@ Private Sub Worksheet_Change(ByVal Target As Range)
             ProtectSheet (protectionStatus)
         End If
     Next
-    Cancel = True
     Application.EnableEvents = True
+    Cancel = True
 End Sub
 
 Private Function toggleTestCaseStatus(curCell) As String
