@@ -11,7 +11,7 @@ Attribute VB_Name = "GoToEnd"
 'Inputs: ---;
 '-----------------------------------------------------------------------------------
 Sub GoToEnd()
-    addr = Cells(Range("A" & Rows.count).End(xlUp).Row, 1).Address
+    addr = Cells(lastRowNumber, 1).Address
     Range(addr).Select
 End Sub
 

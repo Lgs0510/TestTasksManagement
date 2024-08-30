@@ -29,11 +29,11 @@ Sub ImportMainReqs()
         Exit Sub
     End If
     ActiveWorkbook.Worksheets("Trace").Activate
-    LastRow = ActiveSheet.Range("A" & ActiveSheet.Rows.count).End(xlUp).Row
+    LastRow = lastRowNumber
     curTraceReqlist.letList = readTraceSheetReqs
     For Each req In csvReqs.getReqListNO
         If Not curTraceReqlist.Contains(Replace(req, "CV-", "")) Then
-            LastRow = Range("A" & Rows.count).End(xlUp).Row
+            LastRow = lastRowNumber
             Cells(LastRow + 1, CvNumberCN) = req
             LastRow = LastRow + 1
             curentRowNmb = LastRow

@@ -120,7 +120,7 @@ Public Function readTestCasesSheet() As String()
     
     currentSheetName = ActiveSheet.Name
     ActiveWorkbook.Worksheets("TestCases").Activate
-    LastRow = Range("A" & Rows.count).End(xlUp).Row
+    LastRow = lastRowNumber
     If LastRow < 2 Then
         Exit Function
     End If

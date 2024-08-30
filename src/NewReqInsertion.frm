@@ -31,7 +31,7 @@ Private Sub btnInsertion_Click()
         Exit Sub
     End If
  
-    LastRow = ActiveSheet.Range("A" & ActiveSheet.Rows.count).End(xlUp).Row
+    LastRow = lastRowNumber
     wholeTestCasesList = Range("A2", "A" + CStr(LastRow))
     
     testCasesNumber = SizeOfArray(wholeTestCasesList)
