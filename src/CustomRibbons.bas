@@ -221,6 +221,7 @@ Function CVribbons_xml() As String
     xmlText = xmlText & "<mso:button id=""GoToEnd_Ribbon"" label=""End Of List"" imageMso=""_3DPerspectiveDecrease"" onAction=""GoToEnd.GoToEnd"" visible=""true""/>"
     xmlText = xmlText & "<mso:button id=""GoToBegining_Ribbon"" label=""Begining of the List"" imageMso=""_3DPerspectiveIncrease"" onAction=""GoToBegining.GoToBegining"" visible=""true""/>"
     xmlText = xmlText & "<mso:button id=""GoToTrace_Ribbon"" label=""Back to TRACE"" imageMso=""OutlinePromoteToHeading"" onAction=""GoToTrace.GoToTrace"" visible=""true""/>"
+    xmlText = xmlText & "<mso:button id=""DeleteAllSheets"" label=""Delete All Sheets"" imageMso=""CancelRequest"" onAction=""InitializeWorkBook.deleteAllSheets"" visible=""true""/>"
     xmlText = xmlText & "</mso:group>"
     xmlText = xmlText & "<mso:group id=""mso_c1.4CB5718"" label=""DEVELOPMENT"" autoScale=""true"">"
     xmlText = xmlText & "<mso:button id=""ExportCode"" label=""Export Code"" imageMso=""SourceControlCheckOut"" onAction=""VersionControl.exportCode"" visible=""true""/>"

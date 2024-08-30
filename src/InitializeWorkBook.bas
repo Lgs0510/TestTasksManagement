@@ -267,3 +267,13 @@ sheetExists = (ActiveWorkbook.Sheets(some_sheet).index > 0)
 
 End Function
 
+Sub deleteAllSheets()
+    Application.DisplayAlerts = False
+    totalAmountOfSheets = ActiveWorkbook.Worksheets.count
+    For curSheet = totalAmountOfSheets To 1 Step -1
+        If Left(ActiveWorkbook.Worksheets(curSheet).Name, 3) = "CV-" Then
+            ActiveWorkbook.Worksheets(curSheet).Delete
+        End If
+    Next
+    Application.DisplayAlerts = True
+End Sub
