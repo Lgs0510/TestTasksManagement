@@ -226,6 +226,9 @@ Function CVribbons_xml() As String
     xmlText = xmlText & "<mso:group id=""mso_c1.4CB5718"" label=""DEVELOPMENT"" autoScale=""true"">"
     xmlText = xmlText & "<mso:button id=""ExportCode"" label=""Export Code"" imageMso=""SourceControlCheckOut"" onAction=""VersionControl.exportCode"" visible=""true""/>"
     xmlText = xmlText & "<mso:button id=""ImportCode"" label=""Import Code"" imageMso=""SourceControlCheckIn"" onAction=""VersionControl.importCode"" visible=""true""/>"
+    xmlText = xmlText & "<mso:button id=""ShowSample"" label=""Show Sample"" imageMso=""SignatureShow"" onAction=""SampleVisibility.ShowSample"" visible=""true""/>"
+    xmlText = xmlText & "<mso:button id=""HideSample"" label=""Hide Sample"" imageMso=""SlideMasterMediaPlaceholderInsert"" onAction=""SampleVisibility.HideSample"" visible=""true""/>"
+    xmlText = xmlText & "<mso:button id=""ResetRibbons"" label=""Reset Menu Tabs"" imageMso=""ControlsGallery"" onAction=""CustomRibbons.ResetRibbons"" visible=""true""/>"
     xmlText = xmlText & "</mso:group>"
     xmlText = xmlText & "</mso:tab>"
     xmlText = xmlText & "</mso:tabs>"
@@ -283,3 +286,7 @@ Function defaultRibbons_xml() As String
     defaultRibbons_xml = xmlText
 End Function
 
+Sub ResetRibbons()
+    sbDeleteFile
+    checkBadClosure
+End Sub
