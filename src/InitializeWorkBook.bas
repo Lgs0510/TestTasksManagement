@@ -18,6 +18,8 @@ Sub InitializeWorkBook()
     Dim testCasesSheetCVs() As String
     Dim allTestsList As New list
     
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
     ' Set WS_Count equal to the number of worksheets in the active
     ' workbook.
     WS_Count = ActiveWorkbook.Worksheets.count
@@ -88,6 +90,9 @@ Sub InitializeWorkBook()
         A = updateTestCasesSheet_CvOnly(allTestsList, testCasesSheetCVs)
     End If
     MsgBox "End of CV-Number Collumn"
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
 End Sub
 
 '--------------------------------------------------------

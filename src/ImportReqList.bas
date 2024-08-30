@@ -22,6 +22,8 @@ Sub ImportMainReqs()
     Dim overwriteAnswer As VbMsgBoxResult
     Dim overwriteAllAnswer As VbMsgBoxResult
     
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
     protectStatus = ActiveSheet.ProtectContents
     UnprotectSheet (protectStatus)
     Set csvReqs = ImportCsvRequirements
@@ -63,5 +65,7 @@ Sub ImportMainReqs()
         Cells(curentRowNmb, LinkedWorkItemsCN) = csvReqs.getReqLikedWkItems("CV-" + req)
     Next
     ProtectSheet (protectStatus)
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
     InitializeWorkBook.InitializeWorkBook
 End Sub

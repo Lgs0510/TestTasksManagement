@@ -17,11 +17,16 @@ Attribute VB_Exposed = False
 
 
 
+
 Private Sub btnInsertion_Click()
     'Insert Button
     Dim curReqList As New list
     Dim testCasesArray() As String
     Dim testCaseCv As New TestCaseObj
+    
+    
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
     
     curRow = Selection.Row
     If Not IsNumeric(txtBoxCvNumber) & Len(txtBoxCvNumber) > 0 Then
@@ -37,7 +42,7 @@ Private Sub btnInsertion_Click()
         Exit Sub
     End If
 
-    wholeList = "A" + CStr(Range("J5").value)
+    wholeList = "A" + CStr(lastRowNumber)
     wholeTestCasesList = Range("A2", wholeList)
     
     testCasesNumber = SizeOfArray(wholeTestCasesList)
@@ -88,7 +93,12 @@ Private Sub btnInsertion_Click()
         testCaseCv.cvOld = ""
     End If
     testCaseCv.testStatus = strTestResult
-    updateTestCasesCVs testCaseCv
+    If testCaseCv.cvOld <> "" Then
+        updateTestCasesCVs testCaseCv
+    End If
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
     Unload Me
 End Sub
 

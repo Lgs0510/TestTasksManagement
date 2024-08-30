@@ -17,6 +17,7 @@ Attribute VB_Exposed = False
 
 
 
+
 '----------------- Public Local Variables----------------
 Dim firstKeyPress As Boolean
 Dim testsList() As String
@@ -79,6 +80,8 @@ Private Sub Page2_Add_btn_Click()
     Dim i As Integer
     Dim testCasesSheetCVs() As String
         
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
     ReDim testsArray(SizeOfArray(testsList) - 1)
     For i = 1 To SizeOfArray(testsList) - 1
         testsArray(i - 1).cvNumber = testsList(i, 0)
@@ -94,6 +97,9 @@ Private Sub Page2_Add_btn_Click()
     testCasesSheetCVs = readTestCasesSheet()
     A = updateTestCasesSheet(allTestsList, testCasesSheetCVs)
     updateTestCasesCVs allTestsList
+    
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
     Unload Me
 End Sub
 
