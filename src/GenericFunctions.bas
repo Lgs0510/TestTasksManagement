@@ -112,3 +112,6 @@ End Function
 
 
 
+Public Function lastRowNumber() As Integer
+    lastRowNumber = ActiveSheet.Range("A" & ActiveSheet.Rows.count).End(xlUp).Row
+End Function
