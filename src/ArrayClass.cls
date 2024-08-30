@@ -111,7 +111,7 @@ Public Sub RemoveDuplicates()
     If ArraySize > 1 Then
         For Each cv In arrayVar
             firstMatch = True
-            For i = 0 To ArraySize - 2
+            For i = 0 To ArraySize - 1
                 If cv <> "" Then
                     If arrayVar(i) = cv Then
                         If Not firstMatch Then

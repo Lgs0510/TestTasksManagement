@@ -120,7 +120,7 @@ Public Sub RemoveDuplicates()
     If listSize > 1 Then
         For Each cv In list
             firstMatch = True
-            For i = 0 To listSize - 2
+            For i = 0 To listSize - 1
                 If cv <> "" Then
                     If list(i) = cv Then
                         If Not firstMatch Then

@@ -122,7 +122,7 @@ Public Sub RemoveDuplicates()
             If cv Is Nothing Then
                 Exit For
             End If
-            For i = 0 To listSize - 2
+            For i = 0 To listSize - 1
                 If cv.cvNumber <> "" Then
                     If testLists(i).cvNumber = cv.cvNumber Then
                         If Not firstMatch Then
