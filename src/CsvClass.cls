@@ -14,7 +14,7 @@ Private csvContent As New Collection
 Private numberOfLines As Integer
 Private Type csvDataTypes
     id() As New csvIDClass
-    Title() As New csvTitleClass
+    'Title() As New csvTitleClass
     lastUpdated() As New csvLastUpdatedClass
     linkedWorkItens() As New csvLinkedWorkItensClass
 End Type
@@ -23,10 +23,6 @@ Private csvFile As csvDataTypes
 
 ' Event - triggered when class created
 Private Sub Class_Initialize()
-'    csvContent.Add item:=id, Key:="ID"
-'    csvContent.Add item:=title, Key:="Title"
-'    csvContent.Add item:=lastUpdated, Key:="Updated"
-'    csvContent.Add item:=linkedWorkItens, Key:="LinkedWorkItens"
 End Sub
 
 Public Property Let newCsv(newCsv)
@@ -49,18 +45,18 @@ End Property
 Public Sub initCsv(csvSize, listIDs)
     Dim i, z As Integer
     ReDim csvFile.id(csvSize)
-    ReDim csvFile.Title(csvSize)
+    'ReDim csvFile.Title(csvSize)
     ReDim csvFile.lastUpdated(csvSize)
     ReDim csvFile.linkedWorkItens(csvSize)
     
     For i = 0 To csvSize
         csvFile.id(i).initClass (listIDs.Find(csvFile.id(i).getName))
-        csvFile.Title(i).initClass (listIDs.Find(csvFile.Title(i).getName))
+        'csvFile.Title(i).initClass (listIDs.Find(csvFile.Title(i).getName))
         csvFile.lastUpdated(i).initClass (listIDs.Find(csvFile.lastUpdated(i).getName))
         csvFile.linkedWorkItens(i).initClass (listIDs.Find(csvFile.linkedWorkItens(i).getName))
     Next
     csvContent.Add item:=csvFile.id, Key:="ID"
-    csvContent.Add item:=csvFile.Title, Key:="Title"
+    'csvContent.Add item:=csvFile.Title, Key:="Title"
     csvContent.Add item:=csvFile.lastUpdated, Key:="Updated"
     csvContent.Add item:=csvFile.linkedWorkItens, Key:="Linked Work Items"
 End Sub
@@ -71,7 +67,7 @@ Public Sub addLine(strLine As String)
     Dim anything As Integer
     lineArray = Split(strLine, ";")
     csvContent("ID")(numberOfLines).setValue (lineArray(csvContent("ID")(numberOfLines).getIndex))
-    csvContent("Title")(numberOfLines).setValue (lineArray(csvContent("Title")(numberOfLines).getIndex))
+    'csvContent("Title")(numberOfLines).setValue (lineArray(csvContent("Title")(numberOfLines).getIndex))
     csvContent("Linked Work Items")(numberOfLines).setValue (lineArray(csvContent("Linked Work Items")(numberOfLines).getIndex))
     If csvContent("Updated")(numberOfLines).getIndex >= 0 Then
         csvContent("Updated")(numberOfLines).setValue (lineArray(csvContent("Updated")(numberOfLines).getIndex))
