@@ -209,6 +209,7 @@ Function CVribbons_xml() As String
     xmlText = xmlText & "<mso:button id=""InitializeWorkBook_Ribbon"" label=""Build Workbook"" imageMso=""AutoFormat"" onAction=""InitializeWorkBook.InitializeWorkBook"" visible=""true""/>"
     xmlText = xmlText & "<mso:button id=""InsertRequirement_Ribbon"" label=""Insert 1 Requirement"" imageMso=""LassoSelect"" onAction=""InsertRequirement.InsertRequirement"" visible=""true""/>"
     xmlText = xmlText & "<mso:button id=""ImportRequirementsFromCSV"" label=""Import From CSV"" imageMso=""HorizontalSpacingDecrease"" onAction=""ImportReqList.ImportMainReqs"" visible=""true""/>"
+    xmlText = xmlText & "<mso:button id=""OverwriteOldCVsWithNewCVs"" label=""Overwrite Old CVs with New CVs"" imageMso=""HyperlinksVerify"" onAction=""UpdateOldCvsWithNewCvs.UpdateOldCvWithNewCv"" visible=""true""/>"
     xmlText = xmlText & "</mso:group>"
     xmlText = xmlText & "<mso:group id=""mso_c1.1F151500"" label=""TestCases"" autoScale=""true"">"
     xmlText = xmlText & "<mso:button id=""UpdateScriptsList_Ribbon"" label=""Update Script List"" imageMso=""RecordsRefreshMenu"" onAction=""UpdateScriptsList.UpdateScriptsList"" visible=""true""/>"

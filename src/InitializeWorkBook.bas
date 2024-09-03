@@ -2,6 +2,8 @@ Attribute VB_Name = "InitializeWorkBook"
 Public Const CvNumberCN = 1
 Public Const WorkItemCN = 2
 Public Const LinkedWorkItemsCN = 8
+Public Const NewCvCollumnLetter = "E"
+Public Const TestCvCollumnLetter = "B"
 '-----------------------------------Initialize Workbook---------------------------------
 'Function Name:InitializeWorkBook
 'Description: This function is responsible for .
