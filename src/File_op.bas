@@ -73,7 +73,7 @@ End Function
 Private Function getFilePath() As String
     Dim FilePath As String
     
-    ImportCsv.Show
+    ImportFile.Show
     FilePath = DataComm.dataChannel.getData
     getFilePath = FilePath
 
