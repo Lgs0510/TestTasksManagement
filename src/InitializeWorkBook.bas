@@ -266,6 +266,8 @@ Sub closeSheetTemplate()
 End Sub
 
 Sub createNewSheets(currentCVNumber)
+    On Error GoTo ErrorHandler
+    
     prepareSheetTemplate
     For Each cv In currentCVNumber
         Set NewSheet = ActiveWorkbook.Worksheets.Add(After:=ActiveWorkbook.Worksheets(ActiveWorkbook.Worksheets.count))
@@ -273,6 +275,12 @@ Sub createNewSheets(currentCVNumber)
         applySheetTemplate (cv)
     Next
     closeSheetTemplate
+    
+    
+    Exit Sub
+ErrorHandler:
+        MsgBox ("There is some sheet already named: " + CV + " Please delete/rename it and try again!")
+    Resume Next
 End Sub
 Function sheetExists(some_sheet As String) As Boolean
 
