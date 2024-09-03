@@ -34,14 +34,27 @@ End Function
 
 Sub DeleteRequirement()
     Dim overwriteAnswer As VbMsgBoxResult
+    Dim SheetsList As New list
+    Dim WS_Count As Integer
     
-    If ActiveCell.Column = WorkItemCN Then
-        If InStr(ActiveCell.Column, "CV-") Then
-            overwriteAnswer = MsgBox("Are you sure you want to delete " + ActiveCell.value + "?", vbYesNo, "Delete Requirement!")
+    WS_Count = ActiveWorkbook.Worksheets.count
+
+    For curSheet = 1 To WS_Count
+        SheetsList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
+    Next
+    If ActiveCell.Row > 1 Then
+        currentCV = Range(TestCvCollumnLetter + CStr(ActiveCell.Row))
+        If InStr(currentCV, "CV-") Then
+            overwriteAnswer = MsgBox("Are you sure you want to delete " + currentCV + "?", vbYesNo, "Delete Requirement!")
             If overwriteAnswer = vbYes Then
-                ActiveWorkbook.Sheets(ActiveCell.value).Delete
+                If SheetsList.Contains(currentCV) Then
+                    Application.DisplayAlerts = False
+                    ActiveWorkbook.Sheets(currentCV).Delete
+                    Application.DisplayAlerts = True
+                End If
                 ActiveWorkbook.Sheets("Trace").Rows(ActiveCell.Row).EntireRow.Delete
             End If
         End If
     End If
 End Sub
+
