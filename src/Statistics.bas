@@ -13,7 +13,9 @@ Attribute VB_Name = "Statistics"
 Sub getTestStatistict()
     Dim cvList As New TestCasesList
     Dim testCase As New TestCaseObj
-
+    
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
     For Each Worksheet In ActiveWorkbook.Worksheets
         If InStr(Worksheet.Name, "CV-") Then
             Worksheet.Activate
@@ -27,6 +29,8 @@ Sub getTestStatistict()
             Wend
         End If
     Next
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
     cvList.RemoveDuplicates
     ActiveWorkbook.Worksheets("Statistics").Activate
     Range("B46").Select
