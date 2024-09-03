@@ -28,9 +28,16 @@ Sub InitializeWorkBook()
     Set SheetsList = CreateObject("System.Collections.ArrayList")
     Set sheetsToCreateList = CreateObject("System.Collections.ArrayList")
     SheetsList.Clear
-    For curSheet = 1 To WS_Count
-        SheetsList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
-        sheetsToCreateList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
+    For curSheet = 1 To WS_Count - 1
+        If InStr(ActiveWorkbook.Worksheets(curSheet).Name, "Sheet") Then
+            Application.DisplayAlerts = False
+            ActiveWorkbook.Worksheets(curSheet).Delete
+            Application.DisplayAlerts = True
+            curSheet = curSheet - 1
+        Else
+            SheetsList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
+            sheetsToCreateList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
+        End If
     Next
     
     
