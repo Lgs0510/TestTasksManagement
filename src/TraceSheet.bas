@@ -31,3 +31,17 @@ Public Function readTraceSheetReqs() As String()
     ActiveWorkbook.Worksheets(currentSheetName).Activate
     readTraceSheetReqs = sheetTraceReqs
 End Function
+
+Sub DeleteRequirement()
+    Dim overwriteAnswer As VbMsgBoxResult
+    
+    If ActiveCell.Column = WorkItemCN Then
+        If InStr(ActiveCell.Column, "CV-") Then
+            overwriteAnswer = MsgBox("Are you sure you want to delete " + ActiveCell.value + "?", vbYesNo, "Delete Requirement!")
+            If overwriteAnswer = vbYes Then
+                ActiveWorkbook.Sheets(ActiveCell.value).Delete
+                ActiveWorkbook.Sheets("Trace").Rows(ActiveCell.Row).EntireRow.Delete
+            End If
+        End If
+    End If
+End Sub
