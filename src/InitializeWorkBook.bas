@@ -10,7 +10,7 @@ Sub InitializeWorkBook()
         
     Dim WS_Count As Integer
     Dim curSheet As Integer
-    Dim SheetsList As Object, sheetsToCreateList As Object
+    Dim SheetsList As New list, sheetsToCreateList As New list
     Dim linkedReqs As Variant, linkedTests() As String
     Dim testCasesSheetCVs() As String
     Dim allTestsList As New list
@@ -20,18 +20,18 @@ Sub InitializeWorkBook()
     ' Set WS_Count equal to the number of worksheets in the active
     ' workbook.
     WS_Count = ActiveWorkbook.Worksheets.count
-    Set SheetsList = CreateObject("System.Collections.ArrayList")
-    Set sheetsToCreateList = CreateObject("System.Collections.ArrayList")
-    SheetsList.Clear
-    For curSheet = 1 To WS_Count - 1
-        If InStr(ActiveWorkbook.Worksheets(curSheet).Name, "Sheet") Then
-            Application.DisplayAlerts = False
-            ActiveWorkbook.Worksheets(curSheet).Delete
-            Application.DisplayAlerts = True
-            curSheet = curSheet - 1
-        Else
-            SheetsList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
-            sheetsToCreateList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
+    For curSheet = 1 To WS_Count
+        If curSheet <= WS_Count Then
+            If InStr(ActiveWorkbook.Worksheets(curSheet).Name, "Sheet") Then
+                Application.DisplayAlerts = False
+                ActiveWorkbook.Worksheets(curSheet).Delete
+                Application.DisplayAlerts = True
+                curSheet = curSheet - 1
+                WS_Count = WS_Count - 1
+            Else
+                SheetsList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
+                sheetsToCreateList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
+            End If
         End If
     Next
     
@@ -44,20 +44,20 @@ Sub InitializeWorkBook()
                 SheetsList.Add (currentCV)
                 sheetsToCreateList.Add (currentCV)
             Else
-                sheetsToCreateList.Remove (currentCV)
+                sheetsToCreateList.RemoveStr (currentCV)
             End If
         Else
             Exit For
         End If
     Next
-    SheetsList.Remove ("Sample")
-    SheetsList.Remove ("Trace")
-    SheetsList.Remove ("TestCases")
-    SheetsList.Remove ("Statistics")
-    sheetsToCreateList.Remove ("Sample")
-    sheetsToCreateList.Remove ("Trace")
-    sheetsToCreateList.Remove ("TestCases")
-    sheetsToCreateList.Remove ("Statistics")
+    SheetsList.RemoveStr ("Sample")
+    SheetsList.RemoveStr ("Trace")
+    SheetsList.RemoveStr ("TestCases")
+    SheetsList.RemoveStr ("Statistics")
+    sheetsToCreateList.RemoveStr ("Sample")
+    sheetsToCreateList.RemoveStr ("Trace")
+    sheetsToCreateList.RemoveStr ("TestCases")
+    sheetsToCreateList.RemoveStr ("Statistics")
     createNewSheets sheetsToCreateList
     For curRowNumber = 2 To 10000
         ActiveWorkbook.Worksheets("Trace").Activate
