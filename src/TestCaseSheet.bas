@@ -49,6 +49,7 @@ Public Function updateTestCasesSheet_CvOnly(newTestCasesList As list, testCasesS
             Password:=sheetsProtectionPassword, _
             AllowFiltering:=True, _
             AllowSorting:=True
+        updateNewCVsFormulas
     End If
 End Function
 
@@ -104,6 +105,7 @@ Public Function updateTestCasesSheet(newTestCasesList As TestCasesList, testCase
             Password:=sheetsProtectionPassword, _
             AllowFiltering:=True, _
             AllowSorting:=True
+        updateNewCVsFormulas
     End If
 End Function
 
@@ -180,4 +182,22 @@ Public Sub updateTestCasesCVs(newTestCvsList)
             Next
         End If
     Next
+End Sub
+
+
+
+'------------------------------Update New CVs Formulas------------------------------
+'Function Name:updateNewCVsFormulas
+'Description: This function is responsible for keep the Nev CV collumn (in TestCases sheet) with the formula for find the New CV number.
+'Inputs: --
+'-----------------------------------------------------------------------------------
+Sub updateNewCVsFormulas()
+            ActiveSheet.Unprotect (sheetsProtectionPassword)
+            Range("D2").Copy
+            Range("D3:D" + CStr(lastRowNumber + 1000)).PasteSpecial
+            
+            ActiveSheet.Protect _
+                Password:=sheetsProtectionPassword, _
+                AllowFiltering:=True, _
+                AllowSorting:=True
 End Sub
