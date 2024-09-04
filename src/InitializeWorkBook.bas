@@ -260,11 +260,11 @@ Sub closeSheetTemplate()
     VeryHiddenSheet ("Sample")
 End Sub
 
-Sub createNewSheets(currentCVNumber)
+Sub createNewSheets(currentCVNumber As list)
     On Error GoTo ErrorHandler
     
     prepareSheetTemplate
-    For Each cv In currentCVNumber
+    For Each CV In currentCVNumber.getList
         Set NewSheet = ActiveWorkbook.Worksheets.Add(After:=ActiveWorkbook.Worksheets(ActiveWorkbook.Worksheets.count))
         NewSheet.Name = cv
         applySheetTemplate (cv)
