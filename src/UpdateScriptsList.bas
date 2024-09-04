@@ -12,15 +12,13 @@ Attribute VB_Name = "UpdateScriptsList"
 Sub UpdateScriptsList()
     Dim bDoneStatus As Boolean
     Dim debugVar As Boolean
-    Dim WkItemCN, StatusCN, OldCvCN, NewCvCN, ScriptNameCN, ScriptPathCN, ScriptPathLN As Integer
+    Dim StatusCN NewCvCN, ScriptNameCN, ScriptPathCN, ScriptPathLN As Integer
     Dim scriptNameArray As New ScriptNameObj
     Dim testsScriptlist As New CvArray
     
     Set objFSO = CreateObject("Scripting.FileSystemObject")
     
-    WkItemCN = 1
     StatusCN = 2
-    OldCvCN = 3
     NewCvCN = 4
     ScriptNameCN = 6
 
@@ -62,13 +60,11 @@ Sub UpdateScriptsList()
     Next
     ActiveSheet.Unprotect (sheetsProtectionPassword)
     For curRowNumber = 2 To numberOfCvs
-        If Not IsEmpty(Cells(curRowNumber, WkItemCN)) Then
-            If IsEmpty(Cells(curRowNumber, ScriptNameCN)) Then
-                curReqToSearch = Cells(curRowNumber, WkItemCN)
-                reqIndex = testsScriptlist.Find(curReqToSearch)
-                If reqIndex >= 0 Then
-                    Cells(curRowNumber, ScriptNameCN) = testsScriptlist.GetScriptName(CInt(reqIndex))
-                End If
+        If Not IsEmpty(Cells(curRowNumber, TRACE_LinkedWorkItemsCN)) Then
+            curReqToSearch = Cells(curRowNumber, TRACE_LinkedWorkItemsCN))
+            reqIndex = testsScriptlist.Find(curReqToSearch)
+            If reqIndex >= 0 Then
+                Cells(curRowNumber, ScriptNameCN) = testsScriptlist.GetScriptName(CInt(reqIndex))
             End If
         End If
         Application.StatusBar = "Updating scripts list.... " + CStr(100 * curRowNumber / numberOfCvs) + "%"

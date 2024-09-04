@@ -64,9 +64,9 @@ Private Sub btnInsertion_Click()
     End If
     ActiveSheet.Unprotect (sheetsProtectionPassword)
     If overwriteAnswer = 0 Then
-        ActiveCell.value = txtBoxCvNumber
+        Cells(rowToUpdate, TRACE_CvNumberCN).value = txtBoxCvNumber
     End If
-    Cells(rowToUpdate, 8).value = txtBoxLinkedWI
+    Cells(rowToUpdate, TRACE_LinkedWorkItemsCN).value = txtBoxLinkedWI
     ActiveSheet.Protect _
         Password:=sheetsProtectionPassword, _
         AllowFiltering:=True, _

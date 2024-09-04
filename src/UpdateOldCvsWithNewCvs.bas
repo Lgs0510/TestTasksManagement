@@ -7,10 +7,10 @@ Sub UpdateOldCvWithNewCv()
             Worksheet.Activate
             numberOfRows = lastRowNumber
             For iRow = 2 To numberOfRows
-                Range(NewCvCollumnLetter + CStr(iRow)).Select
+                Range(TESTCASES_NewCvCL + CStr(iRow)).Select
                 If ActiveCell.value <> "" Then
                     If InStr(ActiveCell.value, "CV-") Then
-                        Range(TestCvCollumnLetter + CStr(iRow)).value = Range(NewCvCollumnLetter + CStr(iRow)).value
+                        Range(TESTCASES_TestCvCL + CStr(iRow)).value = Range(TESTCASES_NewCvCL + CStr(iRow)).value
                     End If
                 End If
             Next

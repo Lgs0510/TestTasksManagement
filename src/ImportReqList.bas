@@ -36,7 +36,7 @@ Sub ImportMainReqs()
     For Each req In csvReqs.getReqListNO
         If Not curTraceReqlist.Contains(Replace(req, "CV-", "")) Then
             LastRow = lastRowNumber
-            Cells(LastRow + 1, CvNumberCN) = req
+            Cells(LastRow + 1, TRACE_CvNumberCN) = req
             LastRow = LastRow + 1
             curentRowNmb = LastRow
         Else
@@ -62,7 +62,7 @@ Sub ImportMainReqs()
             End If
         End If
         ActiveWorkbook.Worksheets("Trace").Activate
-        Cells(curentRowNmb, LinkedWorkItemsCN) = csvReqs.getReqLikedWkItems("CV-" + req)
+        Cells(curentRowNmb, TRACE_LinkedWorkItemsCN) = csvReqs.getReqLikedWkItems("CV-" + req)
     Next
     ProtectSheet (protectStatus)
     Application.Calculation = xlCalculationAutomatic

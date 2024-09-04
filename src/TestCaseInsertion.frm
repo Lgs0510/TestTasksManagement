@@ -60,28 +60,28 @@ Private Sub btnInsertion_Click()
 
     Cells(curRow, 1).Select
     If curReqList.Contains("CV-" + txtBoxCvNumber) Then
-        If IsEmpty(Cells(Selection.Row, 1)) Or (StrComp("CV-" + txtBoxCvNumber, Cells(Selection.Row, 1).value) <> 0) Then
+        If IsEmpty(Cells(selectedRow, TESTCASES_TRACE_WorkItemCN)) Or (StrComp("CV-" + txtBoxCvNumber, Cells(selectedRow, TESTCASES_TRACE_WorkItemCN).value) <> 0) Then
             MsgBox "This requirement is already on the list!      Line: " + CStr(curReqList.Find("CV-" + txtBoxCvNumber) + 2)
             Exit Sub
         End If
     End If
     
     ActiveSheet.Unprotect (sheetsProtectionPassword)
-    Cells(Selection.Row, 1) = "CV-" + txtBoxCvNumber
+    Cells(selectedRow, TESTCASES_TRACE_WorkItemCN) = "CV-" + txtBoxCvNumber
     If Len(txtBoxOldCvNumber) > 0 Then
-        Cells(Selection.Row, 3) = "CV-" + txtBoxOldCvNumber
+        Cells(selectedRow, TESTCASES_OldCvCN) = "CV-" + txtBoxOldCvNumber
     End If
     
     Select Case btnTestResult
         Case True
-            Cells(Selection.Row, 2) = "OK"
+            Cells(selectedRow, TESTCASES_StatusCN) = "OK"
         Case False
-            Cells(Selection.Row, 2) = "NOK"
+            Cells(selectedRow, TESTCASES_StatusCN) = "NOK"
         Case Else
-            Cells(Selection.Row, 2) = ""
+            Cells(selectedRow, TESTCASES_StatusCN) = ""
     End Select
 
-    strTestResult = Cells(Selection.Row, 2)
+    strTestResult = Cells(selectedRow, TESTCASES_StatusCN)
     ActiveSheet.Protect _
         Password:=sheetsProtectionPassword, _
         AllowFiltering:=True, _

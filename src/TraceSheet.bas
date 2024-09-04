@@ -43,7 +43,7 @@ Sub DeleteRequirement()
         SheetsList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
     Next
     If ActiveCell.Row > 1 Then
-        currentCV = Range(TestCvCollumnLetter + CStr(ActiveCell.Row))
+        currentCV = Range(TESTCASES_TestCvCL + CStr(ActiveCell.Row))
         If InStr(currentCV, "CV-") Then
             overwriteAnswer = MsgBox("Are you sure you want to delete " + currentCV + "?", vbYesNo, "Delete Requirement!")
             If overwriteAnswer = vbYes Then

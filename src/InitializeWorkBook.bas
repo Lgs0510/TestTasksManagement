@@ -1,9 +1,4 @@
 Attribute VB_Name = "InitializeWorkBook"
-Public Const CvNumberCN = 1
-Public Const WorkItemCN = 2
-Public Const LinkedWorkItemsCN = 8
-Public Const NewCvCollumnLetter = "E"
-Public Const TestCvCollumnLetter = "B"
 '-----------------------------------Initialize Workbook---------------------------------
 'Function Name:InitializeWorkBook
 'Description: This function is responsible for .
@@ -43,8 +38,8 @@ Sub InitializeWorkBook()
     
     For curRowNumber = 2 To 10000
         ActiveWorkbook.Worksheets("Trace").Activate
-        If Not IsEmpty(Cells(curRowNumber, CvNumberCN)) Then
-            currentCV = Cells(curRowNumber, WorkItemCN)
+        If Not IsEmpty(Cells(curRowNumber, TRACE_CvNumberCN)) Then
+            currentCV = Cells(curRowNumber, TRACE_WorkItemCN)
             If Not SheetsList.Contains(currentCV) Then
                 SheetsList.Add (currentCV)
                 sheetsToCreateList.Add (currentCV)
@@ -66,11 +61,11 @@ Sub InitializeWorkBook()
     createNewSheets sheetsToCreateList
     For curRowNumber = 2 To 10000
         ActiveWorkbook.Worksheets("Trace").Activate
-        If Not IsEmpty(Cells(curRowNumber, CvNumberCN)) Then
-            If Not IsEmpty(Cells(curRowNumber, LinkedWorkItemsCN)) Then
-                currentCV = Cells(curRowNumber, WorkItemCN)
+        If Not IsEmpty(Cells(curRowNumber, TRACE_CvNumberCN)) Then
+            If Not IsEmpty(Cells(curRowNumber, TRACE_LinkedWorkItemsCN)) Then
+                currentCV = Cells(curRowNumber, TRACE_WorkItemCN)
                 If sheetsToCreateList.Contains(currentCV) Then
-                    linkedReqsList = Cells(curRowNumber, LinkedWorkItemsCN)
+                    linkedReqsList = Cells(curRowNumber, TRACE_LinkedWorkItemsCN)
                     linkedTests = ReadLinkedTests(linkedReqsList)
                     linkedReqs = ReadLinkedReqs(linkedReqsList)
                     If SheetsList.Contains(currentCV) Then
