@@ -43,9 +43,10 @@ Public Function updateTestCasesSheet_CvOnly(newTestCasesList As list, testCasesS
         ActiveWorkbook.Worksheets("TestCases").Activate
         lastCellAddress = "A" + CStr(tCSLcopy.Size + 2) + ":A" + CStr(tCSLcopy.Size + 1 + newTestCasesList.Size)
         Range(lastCellAddress).Select
-        ActiveSheet.Unprotect
+        ActiveSheet.Unprotect (sheetsProtectionPassword)
         Range(lastCellAddress).value = Application.Transpose(newTestCasesList.getList)
         ActiveSheet.Protect _
+            Password:=sheetsProtectionPassword, _
             AllowFiltering:=True, _
             AllowSorting:=True
     End If
@@ -90,16 +91,17 @@ Public Function updateTestCasesSheet(newTestCasesList As TestCasesList, testCase
         ActiveWorkbook.Worksheets("TestCases").Activate
         lastCellAddress = "A" + CStr(tCSLcopy.Size + 2)
         Range(lastCellAddress).Select
-        ActiveSheet.Unprotect
-        For Each cv In newTestCasesList.getArray
-            ActiveCell.value = cv.cvNumber
+        ActiveSheet.Unprotect (sheetsProtectionPassword)
+        For Each CV In newTestCasesList.getArray
+            ActiveCell.value = CV.cvNumber
             ActiveCell.Offset(0, 1).Select
-            ActiveCell.value = cv.testStatus
+            ActiveCell.value = CV.testStatus
             ActiveCell.Offset(0, 1).Select
-            ActiveCell.value = cv.cvOld
+            ActiveCell.value = CV.cvOld
             ActiveCell.Offset(1, -2).Select
         Next
         ActiveSheet.Protect _
+            Password:=sheetsProtectionPassword, _
             AllowFiltering:=True, _
             AllowSorting:=True
     End If

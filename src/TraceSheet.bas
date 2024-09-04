@@ -52,9 +52,13 @@ Sub DeleteRequirement()
                     ActiveWorkbook.Sheets(currentCV).Delete
                     Application.DisplayAlerts = True
                 End If
+                ActiveSheet.Unprotect (sheetsProtectionPassword)
                 ActiveWorkbook.Sheets("Trace").Rows(ActiveCell.Row).EntireRow.Delete
+                ActiveSheet.Protect _
+                    Password:=sheetsProtectionPassword, _
+                    AllowFiltering:=True, _
+                    AllowSorting:=True
             End If
         End If
     End If
 End Sub
-

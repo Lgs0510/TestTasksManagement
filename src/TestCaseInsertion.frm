@@ -66,7 +66,7 @@ Private Sub btnInsertion_Click()
         End If
     End If
     
-    ActiveSheet.Unprotect
+    ActiveSheet.Unprotect (sheetsProtectionPassword)
     Cells(Selection.Row, 1) = "CV-" + txtBoxCvNumber
     If Len(txtBoxOldCvNumber) > 0 Then
         Cells(Selection.Row, 3) = "CV-" + txtBoxOldCvNumber
@@ -83,6 +83,7 @@ Private Sub btnInsertion_Click()
 
     strTestResult = Cells(Selection.Row, 2)
     ActiveSheet.Protect _
+        Password:=sheetsProtectionPassword, _
         AllowFiltering:=True, _
         AllowSorting:=True
         

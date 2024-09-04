@@ -73,7 +73,7 @@ End Function
 '-----------------------------------------------------------------------------------
 Public Sub UnprotectSheet(protStatus)
         If protStatus Then
-            ActiveSheet.Unprotect
+            ActiveSheet.Unprotect (sheetsProtectionPassword)
         End If
 End Sub
 
@@ -86,6 +86,7 @@ End Sub
 Public Sub ProtectSheet(protStatus)
         If protStatus Then
             ActiveSheet.Protect _
+                Password:=sheetsProtectionPassword, _
                 AllowFiltering:=True, _
                 AllowSorting:=True
         End If

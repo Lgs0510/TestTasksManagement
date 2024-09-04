@@ -60,7 +60,7 @@ Sub UpdateScriptsList()
             Loop
         End If
     Next
-    ActiveSheet.Unprotect
+    ActiveSheet.Unprotect (sheetsProtectionPassword)
     For curRowNumber = 2 To numberOfCvs
         If Not IsEmpty(Cells(curRowNumber, WkItemCN)) Then
             If IsEmpty(Cells(curRowNumber, ScriptNameCN)) Then
@@ -74,6 +74,7 @@ Sub UpdateScriptsList()
         Application.StatusBar = "Updating scripts list.... " + CStr(100 * curRowNumber / numberOfCvs) + "%"
     Next
     ActiveSheet.Protect _
+        Password:=sheetsProtectionPassword, _
         AllowFiltering:=True, _
         AllowSorting:=True
     Application.StatusBar = False

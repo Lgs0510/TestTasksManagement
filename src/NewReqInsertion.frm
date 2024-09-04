@@ -62,12 +62,13 @@ Private Sub btnInsertion_Click()
             Exit Sub
         End If
     End If
-    ActiveSheet.Unprotect
+    ActiveSheet.Unprotect (sheetsProtectionPassword)
     If overwriteAnswer = 0 Then
         ActiveCell.value = txtBoxCvNumber
     End If
     Cells(rowToUpdate, 8).value = txtBoxLinkedWI
     ActiveSheet.Protect _
+        Password:=sheetsProtectionPassword, _
         AllowFiltering:=True, _
         AllowSorting:=True
     InitializeWorkBook.InitializeWorkBook
