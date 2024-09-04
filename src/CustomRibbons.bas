@@ -232,11 +232,15 @@ Function CVribbons_xml() As String
     xmlText = xmlText & "<mso:button id=""HideSample"" label=""Hide Sample"" imageMso=""SlideMasterMediaPlaceholderInsert"" onAction=""SampleVisibility.HideSample"" visible=""true""/>"
     xmlText = xmlText & "<mso:button id=""ResetRibbons"" label=""Reset Menu Tabs"" imageMso=""ControlsGallery"" onAction=""CustomRibbons.ResetRibbons"" visible=""true""/>"
     xmlText = xmlText & "</mso:group>"
+    xmlText = xmlText & "<mso:group id=""mso_c1.4CB5719"" label=""Help"" autoScale=""true"">"
+    xmlText = xmlText & "<mso:button id=""Help"" label=""Help"" imageMso=""RmsInvokeBrowser"" onAction=""CustomRibbons.OpenOneNoteHelp"" visible=""true""/>"
+    xmlText = xmlText & "</mso:group>"
     xmlText = xmlText & "</mso:tab>"
     xmlText = xmlText & "</mso:tabs>"
     xmlText = xmlText & "</mso:ribbon>"
     xmlText = xmlText & "</mso:customUI>"
     CVribbons_xml = xmlText
+    
 End Function
     
 
@@ -291,4 +295,13 @@ End Function
 Sub ResetRibbons()
     sbDeleteFile
     checkBadClosure
+End Sub
+
+Sub OpenOneNoteHelp()
+    'Keyboard Shortcut: Ctrl+Shift+W
+    On Error GoTo ErrorHandler
+    ActiveWorkbook.FollowHyperlink "https://uasc-my.sharepoint.com/personal/luis_schabarum_universalavionics_com/_layouts/OneNote.aspx?id=%2Fpersonal%2Fluis_schabarum_universalavionics_com%2FDocuments%2FAEL%20Wiki&wd=target%28EXCEL.one%7C1E98C166-2497-4C23-930A-0C299D81A9C3%2F%29onenote:https://uasc-my.sharepoint.com/personal/luis_schabarum_universalavionics_com/Documents/AEL%20Wiki/EXCEL.one#section-id={1E98C166-2497-4C23-930A-0C299D81A9C3}&end", NewWindow:=True
+    Exit Sub
+ErrorHandler:
+    MsgBox "Can't open OneNote"
 End Sub
