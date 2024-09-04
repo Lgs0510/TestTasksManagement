@@ -28,7 +28,8 @@ Private Sub btnInsertion_Click()
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
     
-    curRow = Selection.Row
+    selectedRow = Selection.Row
+    firstEmptyRow = lastRowNumber + 1
     If Not IsNumeric(txtBoxCvNumber) & Len(txtBoxCvNumber) > 0 Then
         MsgBox ("CV Number invalid! Only numbers!")
         Exit Sub
@@ -64,6 +65,13 @@ Private Sub btnInsertion_Click()
             MsgBox "This requirement is already on the list!      Line: " + CStr(curReqList.Find("CV-" + txtBoxCvNumber) + 2)
             Exit Sub
         End If
+    ElseIf Not IsEmpty(Cells(selectedRow, TESTCASES_TRACE_WorkItemCN)) Then
+        overwriteAnswer = MsgBox("Do you want you want to overwrite the " + Cells(selectedRow, TESTCASES_TRACE_WorkItemCN) + "?", vbYesNo, "Overwrite Test Case!")
+        If overwriteAnswer = vbNo Then
+           selectedRow = firstEmptyRow
+        End If
+    Else
+        selectedRow = firstEmptyRow
     End If
     
     ActiveSheet.Unprotect (sheetsProtectionPassword)

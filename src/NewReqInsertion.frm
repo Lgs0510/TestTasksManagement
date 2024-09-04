@@ -48,7 +48,7 @@ Private Sub btnInsertion_Click()
     curReqList.letList = testCasesArray
     
     If Not curReqList.Contains(txtBoxCvNumber) Then
-        rowToUpdate = ActiveCell.Row
+        rowToUpdate = LastRow + 1
     Else
         overwriteAnswer = MsgBox("This requirement is already on the list!" + vbCrLf + "Do you want to update it?", vbYesNo, "WorkItem already Exist!")
         If overwriteAnswer = vbYes Then
