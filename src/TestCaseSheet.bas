@@ -186,6 +186,74 @@ End Sub
 
 
 
+'------------------------------Delete Test Cases------------------------------
+'Function Name:deleteTestCases
+'Description: This function is responsible delete the selected test case from the TestCase sheet, deleting the whole line
+'Inputs: --
+'-----------------------------------------------------------------------------------
+Public Sub deleteTestCases()
+    Dim deleteAnswer As VbMsgBoxResult
+    Dim listToDelete As New list
+    Dim listToKeep As New list
+    Dim listOfDeletedCVs As New list
+
+    If ActiveSheet.Name = "TestCases" Then
+        For Each Line In Selection
+            If Line.Column = 1 Then
+                deleteAnswer = MsgBox("Are you sure you want to delete " + Line.value + "?", vbYesNo, "Delete Test Cases?")
+                If deleteAnswer = vbYes Then
+                    listToDelete.Add (Line.Row)
+                    listOfDeletedCVs.Add (Line.value)
+                Else
+                    listToKeep.Add (Line.Row)
+                End If
+            End If
+        Next
+        If listToDelete.Size > 0 Then
+            listToDelete.SortUpSideDown
+            ActiveSheet.Unprotect (sheetsProtectionPassword)
+            For Each Line In listToDelete.getList
+                If Line > 0 Then
+                    Range("A" + Line).EntireRow.Delete
+                End If
+            Next
+            ActiveSheet.Protect _
+                Password:=sheetsProtectionPassword, _
+                AllowFiltering:=True, _
+                AllowSorting:=True
+            updateNewCVsFormulas
+            removeTestCasesCVs listOfDeletedCVs.getList
+        End If
+    End If
+End Sub
+
+
+
+'------------------------------Remove Test Cases CVs------------------------------
+'Function Name:removeTestCasesCVs
+'Description: This function is responsible for look for all the Test Cases, from received list, 
+'              present in all sheets and remove them.
+'Inputs: testList - list(list) with all cvs that must get removed.
+'-----------------------------------------------------------------------------------
+Sub removeTestCasesCVs(testList)
+    Dim testListToRemove As New list
+    Dim isSingleUpdate As Boolean
+    Dim index As Integer
+    Dim cellCvNumber As String
+      
+    testListToRemove.letList = testList
+    For Each curSheet In ActiveWorkbook.Sheets
+        If StrComp(Left(curSheet.Name, 3), "CV-", vbTextCompare) = 0 Then
+            LastRow = curSheet.Range("A" & curSheet.Rows.count).End(xlUp).Row
+            For Each cell In curSheet.Range("B2", "B" + CStr(LastRow))
+                If testListToRemove.Contains(cell.value) Then
+                   curSheet.Range(cell.Address).EntireRow.Delete
+                End If
+            Next
+        End If
+    Next
+End Sub
+
 '------------------------------Update New CVs Formulas------------------------------
 'Function Name:updateNewCVsFormulas
 'Description: This function is responsible for keep the Nev CV collumn (in TestCases sheet) with the formula for find the New CV number.
