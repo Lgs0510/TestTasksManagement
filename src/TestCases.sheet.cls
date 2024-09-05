@@ -23,7 +23,7 @@ Private Sub Worksheet_Change(ByVal Target As Range)
             Cells(cell.Row, 5).value = Date
         End If
     Next
-    Application.Calculation = Application.Calculation
+    Application.Calculation = calcPrevStatus
     Application.ScreenUpdating = screenPrevUpdate
     ProtectSheet (protectionStatus)
     Application.EnableEvents = True
