@@ -7,14 +7,26 @@ Public Const TRACE_LinkedWorkItemsCN = 8
 
 
 'TestCases Sheet constants
-Public Const TESTCASES_TRACE_WorkItemCN = 1
+Public Const TESTCASES_WorkItemCN = 1
 Public Const TESTCASES_StatusCN = 2
 Public Const TESTCASES_OldCvCN = 3
 Public Const TESTCASES_NewCvCL = "E"
 Public Const TESTCASES_TestCvCL = "B"
 
+'CVs Sheets constants
+Public Const CVs_SHEETS_TestCvCN = 2
+Public Const CVs_SHEETS_StatusCN = 3
+Public Const CVs_SHEETS_OldCvCN = 4
+Public Const CVs_SHEETS_NewCvCN = 5
+Public Const CVs_SHEETS_TestCvCL = "B"
+Public Const CVs_SHEETS_StatusCL = "C"
+Public Const CVs_SHEETS_OldCvCL = "D"
+Public Const CVs_SHEETS_NewCvCL = "E"
 
 
 
 'GLOBAL Constants
 Public Const sheetsProtectionPassword = "naotemsenha"
+Public Const testCaseStatusToDELETE = "DELETED, DRAFT"
+
+
