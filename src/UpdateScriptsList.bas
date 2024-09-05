@@ -59,6 +59,9 @@ Sub UpdateScriptsList()
         End If
     Next
     ActiveSheet.Unprotect (sheetsProtectionPassword)
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.EnableEvents = False
     For curRowNumber = 2 To numberOfCvs
         If Not IsEmpty(Cells(curRowNumber, TRACE_LinkedWorkItemsCN)) Then
             curReqToSearch = Cells(curRowNumber, TRACE_LinkedWorkItemsCN))
@@ -67,8 +70,11 @@ Sub UpdateScriptsList()
                 Cells(curRowNumber, ScriptNameCN) = testsScriptlist.GetScriptName(CInt(reqIndex))
             End If
         End If
-        Application.StatusBar = "Updating scripts list.... " + CStr(100 * curRowNumber / numberOfCvs) + "%"
+        'Application.StatusBar = "Updating scripts list.... " + CStr(100 * curRowNumber / numberOfCvs) + "%"
     Next
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+    Application.EnableEvents = True
     ActiveSheet.Protect _
         Password:=sheetsProtectionPassword, _
         AllowFiltering:=True, _
