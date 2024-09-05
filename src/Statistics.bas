@@ -16,6 +16,7 @@ Sub getTestStatistict()
     
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
+    g_vbaIsRunning = True
     For Each Worksheet In ActiveWorkbook.Worksheets
         If InStr(Worksheet.Name, "CV-") Then
             Worksheet.Activate
@@ -31,6 +32,7 @@ Sub getTestStatistict()
     Next
     Application.Calculation = xlCalculationAutomatic
     Application.ScreenUpdating = True
+    g_vbaIsRunning = False
     cvList.RemoveDuplicates
     ActiveWorkbook.Worksheets("Statistics").Activate
     Range("B46").Select

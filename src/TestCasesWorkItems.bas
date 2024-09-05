@@ -3,6 +3,7 @@ Sub UpdateOldCvWithNewCv()
     Dim statusToDelete As New list
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
+    g_vbaIsRunning = True
     statusToDelete.letList = getTestCasesStatusToRemove
     For Each Worksheet In ActiveWorkbook.Worksheets
         If InStr(Worksheet.Name, "CV-") Then
@@ -23,6 +24,7 @@ Sub UpdateOldCvWithNewCv()
     Next
     Application.Calculation = xlCalculationAutomatic
     Application.ScreenUpdating = True
+    g_vbaIsRunning = False
 End Sub
 
 

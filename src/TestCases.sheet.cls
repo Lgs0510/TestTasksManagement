@@ -1,13 +1,16 @@
 Private Sub Worksheet_Activate()
-    Application.Calculation = xlCalculationAutomatic
-    Application.ScreenUpdating = True
-    ActiveSheet.Protect _
-        Password:=sheetsProtectionPassword, _
-        AllowFiltering:=True, _
-        AllowSorting:=True
+    If Not g_vbaIsRunning Then
+        Application.Calculation = xlCalculationAutomatic
+        Application.ScreenUpdating = True
+        ActiveSheet.Protect _
+            Password:=sheetsProtectionPassword, _
+            AllowFiltering:=True, _
+            AllowSorting:=True
+    End If
 End Sub
 
 Private Sub Worksheet_BeforeDoubleClick(ByVal Target As Range, Cancel As Boolean)
+    g_vbaIsRunning = False
     If Target.Column = 2 Then
         Target = toggleTestCaseStatus(Target)
     Else
@@ -20,6 +23,7 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     protectionStatus = ActiveSheet.ProtectContents
     Dim calcPrevStatus As XlCalculation
     Dim screenPrevUpdate As Boolean
+    g_vbaIsRunning = True
 
     calcPrevStatus = Application.Calculation
     screenPrevUpdate = Application.ScreenUpdating
@@ -36,6 +40,7 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     Application.ScreenUpdating = screenPrevUpdate
     ProtectSheet (protectionStatus)
     Application.EnableEvents = True
+    g_vbaIsRunning = False
     Cancel = True
 End Sub
 

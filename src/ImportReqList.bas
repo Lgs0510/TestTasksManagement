@@ -24,6 +24,7 @@ Sub ImportMainReqs()
     
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
+    g_vbaIsRunning = True
     protectStatus = ActiveSheet.ProtectContents
     UnprotectSheet (protectStatus)
     Set csvReqs = ImportCsvRequirements
@@ -68,4 +69,5 @@ Sub ImportMainReqs()
     Application.Calculation = xlCalculationAutomatic
     Application.ScreenUpdating = True
     InitializeWorkBook.InitializeWorkBook
+    g_vbaIsRunning = False
 End Sub

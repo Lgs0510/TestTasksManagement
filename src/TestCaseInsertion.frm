@@ -18,6 +18,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 Private Sub btnInsertion_Click()
     'Insert Button
     Dim curReqList As New list
@@ -27,6 +29,7 @@ Private Sub btnInsertion_Click()
     
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
+    g_vbaIsRunning = True
     
     selectedRow = Selection.Row
     firstEmptyRow = lastRowNumber + 1
@@ -108,6 +111,7 @@ Private Sub btnInsertion_Click()
     
     Application.Calculation = xlCalculationAutomatic
     Application.ScreenUpdating = True
+    g_vbaIsRunning = False
     Unload Me
 End Sub
 

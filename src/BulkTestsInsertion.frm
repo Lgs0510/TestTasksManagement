@@ -18,6 +18,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 '----------------- Public Local Variables----------------
 Dim firstKeyPress As Boolean
 Dim testsList() As String
@@ -82,6 +84,7 @@ Private Sub Page2_Add_btn_Click()
         
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
+    g_vbaIsRunning = True
     ReDim testsArray(SizeOfArray(testsList) - 1)
     For i = 1 To SizeOfArray(testsList) - 1
         testsArray(i - 1).cvNumber = testsList(i, 0)
@@ -100,6 +103,7 @@ Private Sub Page2_Add_btn_Click()
     
     Application.Calculation = xlCalculationAutomatic
     Application.ScreenUpdating = True
+    g_vbaIsRunning = False
     Unload Me
 End Sub
 

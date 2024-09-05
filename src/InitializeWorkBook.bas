@@ -17,6 +17,7 @@ Sub InitializeWorkBook()
     
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
+    g_vbaIsRunning = True
     ' Set WS_Count equal to the number of worksheets in the active
     ' workbook.
     WS_Count = ActiveWorkbook.Worksheets.count
@@ -97,6 +98,7 @@ Sub InitializeWorkBook()
     
     Application.Calculation = xlCalculationAutomatic
     Application.ScreenUpdating = True
+    g_vbaIsRunning = False
 End Sub
 
 '--------------------------------------------------------

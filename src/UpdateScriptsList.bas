@@ -57,9 +57,10 @@ Sub UpdateScriptsList()
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
     Application.EnableEvents = False
+    g_vbaIsRunning = True
     For curRowNumber = 2 To numberOfCvs
         If Not IsEmpty(Cells(curRowNumber, TESTCASES_WorkItemCN)) Then
-            curReqToSearch = Cells(curRowNumber, TESTCASES_WorkItemCN))
+            curReqToSearch = Cells(curRowNumber, TESTCASES_WorkItemCN)
             reqIndex = testsScriptlist.Find(curReqToSearch)
             If reqIndex >= 0 Then
                 Cells(curRowNumber, TESTCASES_ScriptNameCN) = testsScriptlist.GetScriptName(CInt(reqIndex))
@@ -75,5 +76,6 @@ Sub UpdateScriptsList()
         AllowFiltering:=True, _
         AllowSorting:=True
     Application.StatusBar = False
+    g_vbaIsRunning = False
     MsgBox "Script List Updated!"
 End Sub
