@@ -33,6 +33,6 @@ Public Const CVs_SHEETS_NewCvCL = "E"
 'GLOBAL Constants
 Public Const sheetsProtectionPassword = "naotemsenha"
 Public Const testCaseStatusToDELETE = "DELETED, DRAFT"
-Public COnst GLOBAL_cvMaxNumberLenght = 6
-Public COnst GLOBAL_cvMinNumberLenght = 1
+Public Const GLOBAL_cvMaxNumberLenght = 6
+Public Const GLOBAL_cvMinNumberLenght = 1
 
