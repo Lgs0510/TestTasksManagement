@@ -59,14 +59,14 @@ Private Sub btnInsertion_Click()
     End If
     curReqList.letList = testCasesArray
 
-    Cells(curRow, 1).Select
+    Cells(selectedRow, 1).Select
     If curReqList.Contains("CV-" + txtBoxCvNumber) Then
-        If IsEmpty(Cells(selectedRow, TESTCASES_TRACE_WorkItemCN)) Or (StrComp("CV-" + txtBoxCvNumber, Cells(selectedRow, TESTCASES_TRACE_WorkItemCN).value) <> 0) Then
+        If IsEmpty(Cells(selectedRow, TESTCASES_WorkItemCN)) Or (StrComp("CV-" + txtBoxCvNumber, Cells(selectedRow, TESTCASES_WorkItemCN).value) <> 0) Then
             MsgBox "This requirement is already on the list!      Line: " + CStr(curReqList.Find("CV-" + txtBoxCvNumber) + 2)
             Exit Sub
         End If
-    ElseIf Not IsEmpty(Cells(selectedRow, TESTCASES_TRACE_WorkItemCN)) Then
-        overwriteAnswer = MsgBox("Do you want you want to overwrite the " + Cells(selectedRow, TESTCASES_TRACE_WorkItemCN) + "?", vbYesNo, "Overwrite Test Case!")
+    ElseIf Not IsEmpty(Cells(selectedRow, TESTCASES_WorkItemCN)) Then
+        overwriteAnswer = MsgBox("Do you want you want to overwrite the " + Cells(selectedRow, TESTCASES_WorkItemCN) + "?", vbYesNo, "Overwrite Test Case!")
         If overwriteAnswer = vbNo Then
            selectedRow = firstEmptyRow
         End If
@@ -75,7 +75,7 @@ Private Sub btnInsertion_Click()
     End If
     
     ActiveSheet.Unprotect (sheetsProtectionPassword)
-    Cells(selectedRow, TESTCASES_TRACE_WorkItemCN) = "CV-" + txtBoxCvNumber
+    Cells(selectedRow, TESTCASES_WorkItemCN) = "CV-" + txtBoxCvNumber
     If Len(txtBoxOldCvNumber) > 0 Then
         Cells(selectedRow, TESTCASES_OldCvCN) = "CV-" + txtBoxOldCvNumber
     End If
@@ -131,7 +131,7 @@ Private Sub UserForm_Initialize()
     
     If Not IsNumeric(txtBoxCvNumber) Then
         cvLinePos = InStr(txtBoxCvNumber, "CV-")
-        cvNumberLenght = 6
+        cvNumberLenght = GLOBAL_cvMaxNumberLenght
         While (Not IsNumeric(Mid(txtBoxCvNumber, cvLinePos + 2 + cvNumberLenght, 1))) And (cvNumberLenght > 0)
             cvNumberLenght = cvNumberLenght - 1
         Wend
@@ -141,7 +141,7 @@ Private Sub UserForm_Initialize()
     txtBoxOldCvNumber = Cells(Selection.Row, 3)
     If Not IsNumeric(txtBoxOldCvNumber) Then
         cvLinePos = InStr(txtBoxOldCvNumber, "CV-")
-        cvNumberLenght = 6
+        cvNumberLenght = GLOBAL_cvMaxNumberLenght
         While (Not IsNumeric(Mid(txtBoxOldCvNumber, cvLinePos + 2 + cvNumberLenght, 1))) And (cvNumberLenght > 0)
             cvNumberLenght = cvNumberLenght - 1
         Wend

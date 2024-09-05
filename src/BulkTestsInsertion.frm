@@ -143,7 +143,7 @@ Private Sub TestInsertionOK_btn_Click()
     cvLinePos = 1
     While cvLinePos < Len(iputTextString)
         If (Mid(iputTextString, cvLinePos, 3) = "CV-") Then
-            cvNumberLenght = 1
+            cvNumberLenght = GLOBAL_cvMinNumberLenght
             While (IsNumeric(Mid(iputTextString, cvLinePos + 2 + cvNumberLenght, 1))) And (cvNumberLenght < 7)
                 cvNumberLenght = cvNumberLenght + 1
             Wend

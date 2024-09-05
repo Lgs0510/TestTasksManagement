@@ -141,7 +141,7 @@ Private Function ReadLinkedReqs(ByVal celVal As String) As String()
     For Each i In cvList
         auxArray() = Split(i, ":")
         If StrComp(Replace(auxArray(0), " ", ""), "istracedby", 1) = 0 Then
-            cvNumberLenght = 6
+            cvNumberLenght = GLOBAL_cvMaxNumberLenght
             'While (Not IsNumeric(Mid(auxArray(i), cvLinePos + 2, cvNumberLenght))) And (cvNumberLenght > 0)
                 'cvNumberLenght = cvNumberLenght - 1
             'Wend
@@ -181,7 +181,7 @@ Private Function ReadLinkedTests(ByVal celVal As String) As String()
         auxArray() = Split(i, ":")
         If StrComp(Replace(auxArray(0), " ", ""), "istestedby", 1) = 0 Then
             cvLinePos = InStr(auxArray(1), "CV-")
-            cvNumberLenght = 6
+            cvNumberLenght = GLOBAL_cvMaxNumberLenght
             testing = numericExtractor(auxArray(1), cvLinePos, 6)
             While (Not IsNumeric(Mid(auxArray(1), cvLinePos + 2 + cvNumberLenght, 1))) And (cvNumberLenght > 0)
                 cvNumberLenght = cvNumberLenght - 1

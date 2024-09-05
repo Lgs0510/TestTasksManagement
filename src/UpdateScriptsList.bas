@@ -12,15 +12,10 @@ Attribute VB_Name = "UpdateScriptsList"
 Sub UpdateScriptsList()
     Dim bDoneStatus As Boolean
     Dim debugVar As Boolean
-    Dim StatusCN NewCvCN, ScriptNameCN, ScriptPathCN, ScriptPathLN As Integer
     Dim scriptNameArray As New ScriptNameObj
     Dim testsScriptlist As New CvArray
     
     Set objFSO = CreateObject("Scripting.FileSystemObject")
-    
-    StatusCN = 2
-    NewCvCN = 4
-    ScriptNameCN = 6
 
     numberOfCvs = Range("I5").value
     
@@ -43,7 +38,7 @@ Sub UpdateScriptsList()
                 strLine = objCurScriptToRead.ReadLine
                 cvLinePos = InStr(strLine, "CV-")
                 If cvLinePos > 0 Then
-                    cvNumberLenght = 6
+                    
                     While (Not IsNumeric(Mid(strLine, cvLinePos + 2 + cvNumberLenght, 1))) And (cvNumberLenght > 0)
                         cvNumberLenght = cvNumberLenght - 1
                     Wend
@@ -63,11 +58,11 @@ Sub UpdateScriptsList()
     Application.ScreenUpdating = False
     Application.EnableEvents = False
     For curRowNumber = 2 To numberOfCvs
-        If Not IsEmpty(Cells(curRowNumber, TRACE_LinkedWorkItemsCN)) Then
-            curReqToSearch = Cells(curRowNumber, TRACE_LinkedWorkItemsCN))
+        If Not IsEmpty(Cells(curRowNumber, TESTCASES_WorkItemCN)) Then
+            curReqToSearch = Cells(curRowNumber, TESTCASES_WorkItemCN))
             reqIndex = testsScriptlist.Find(curReqToSearch)
             If reqIndex >= 0 Then
-                Cells(curRowNumber, ScriptNameCN) = testsScriptlist.GetScriptName(CInt(reqIndex))
+                Cells(curRowNumber, TESTCASES_ScriptNameCN) = testsScriptlist.GetScriptName(CInt(reqIndex))
             End If
         End If
         'Application.StatusBar = "Updating scripts list.... " + CStr(100 * curRowNumber / numberOfCvs) + "%"
