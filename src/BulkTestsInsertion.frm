@@ -20,6 +20,7 @@ Attribute VB_Exposed = False
 
 
 
+
 '----------------- Public Local Variables----------------
 Dim firstKeyPress As Boolean
 Dim testsList() As String
@@ -85,11 +86,11 @@ Private Sub Page2_Add_btn_Click()
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
     g_vbaIsRunning = True
-    ReDim testsArray(SizeOfArray(testsList) - 1)
-    For i = 1 To SizeOfArray(testsList) - 1
-        testsArray(i - 1).cvNumber = testsList(i, 0)
-        testsArray(i - 1).testStatus = testsList(i, 1)
-        testsArray(i - 1).cvOld = testsList(i, 2)
+    ReDim testsArray(0 To SizeOfArray(testsList) - 2)
+    For i = 0 To SizeOfArray(testsArray) - 1
+        testsArray(i).cvNumber = testsList(i + 1, 0)
+        testsArray(i).testStatus = testsList(i + 1, 1)
+        testsArray(i).cvOld = testsList(i + 1, 2)
     Next
     allTestsList.letArray = testsArray
     allTestsList.RemoveDuplicates
@@ -195,9 +196,13 @@ End Sub
 'Inputs: ---
 '-----------------------------------------------------------------------------------
 Private Sub TestsResultStatus_btn_Change()
-    setTestResultButton
-    curTest.testStatus = ""
-    updateListBoxLine
+    If currentIndex > 0 Then
+        setTestResultButton
+        curTest.testStatus = ""
+        updateListBoxLine
+    Else
+        MsgBox "No CV selected! Edit is not possible."
+    End If
 End Sub
 
 

@@ -19,7 +19,7 @@ End Property
 
 Public Property Let letArray(newArray)
     testLists = newArray
-    listSize = SizeOfArray(newArray) - 1
+    listSize = SizeOfArray(newArray)
     Me.Size
 End Property
 
