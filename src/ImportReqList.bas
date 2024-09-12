@@ -22,6 +22,7 @@ Sub ImportMainReqs()
     Dim overwriteAnswer As VbMsgBoxResult
     Dim overwriteAllAnswer As VbMsgBoxResult
     
+    ActiveWorkbook.Worksheets("Trace").Activate
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
     g_vbaIsRunning = True
@@ -31,7 +32,6 @@ Sub ImportMainReqs()
     If csvReqs Is Nothing Then
         Exit Sub
     End If
-    ActiveWorkbook.Worksheets("Trace").Activate
     LastRow = lastRowNumber
     curTraceReqlist.letList = readTraceSheetReqs
     For Each req In csvReqs.getReqListNO
