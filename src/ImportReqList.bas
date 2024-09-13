@@ -27,7 +27,6 @@ Sub ImportMainReqs()
     Application.ScreenUpdating = False
     g_vbaIsRunning = True
     protectStatus = ActiveSheet.ProtectContents
-    UnprotectSheet (protectStatus)
     Set csvReqs = ImportCsvRequirements
     If csvReqs Is Nothing Then
         Exit Sub
@@ -35,6 +34,7 @@ Sub ImportMainReqs()
     LastRow = lastRowNumber
     curTraceReqlist.letList = readTraceSheetReqs
     For Each req In csvReqs.getReqListNO
+        UnprotectSheet (True)
         If Not curTraceReqlist.Contains(Replace(req, "CV-", "")) Then
             LastRow = lastRowNumber
             Cells(LastRow + 1, TRACE_CvNumberCN) = req
