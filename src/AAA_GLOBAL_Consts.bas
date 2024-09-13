@@ -1,4 +1,4 @@
-Attribute VB_Name = "AAA_GLOBALConts"
+Attribute VB_Name = "AAA_GLOBAL_Consts"
 'Trace Sheet constants
 Public Const TRACE_CvNumberCN = 1
 Public Const TRACE_WorkItemCN = 2
