@@ -1,9 +1,6 @@
 Attribute VB_Name = "UpdateScriptsList"
 
 
-Dim scriptNameArray As New ScriptNameObj
-Dim testsScriptlist As New CvArray
-
 '--------------------------------------------------------
 '--------------------- Private Subs ---------------------
 '--------------------------------------------------------
@@ -15,29 +12,31 @@ Dim testsScriptlist As New CvArray
 'Inputs: ---
 '---------------------------------------------------------------------------------------------
 Sub UpdateScriptsList()
+    Dim scriptsTestCases As New Dictionary
     Dim calcPrevStatus As XlCalculation
+    Dim debugList As New list
     
-    If readScriptFolder Then
+    GenericFunctions.uiEnable (True)
+    
+    If readScriptFolder(scriptsTestCases) Then
         protectionStatus = ActiveSheet.ProtectContents
-        calcPrevStatus = Application.Calculation
         GenericFunctions.UnprotectSheet
-        testsScriptlist.RemoveDuplicates
-
-        GenericFunctions.uiDisable
         
-        checkCurrentMappedTestCases
+        checkCurrentMappedTestCases testCasesDic:=scriptsTestCases
 
-        insertNewTestCases
+        insertNewTestCases testCasesDic:=scriptsTestCases
+
+        ProgressLoadBarModule.closeProgressBar
         
-        GenericFunctions.uiEnable(calcPrevStatus)
-
         GenericFunctions.ProtectSheet (protectionStatus)
         MsgBox "Script List Updated!"
     End If
     
 End Sub
 
-Private Function readScriptFolder() As Boolean
+Private Function readScriptFolder(testCasesDic As Dictionary) As Boolean
+    Dim scriptNameArray As New ScriptNameObj
+    
     Set objFSO = CreateObject("Scripting.FileSystemObject")
     
     SelectFolder.Show
@@ -69,49 +68,48 @@ Private Function readScriptFolder() As Boolean
                     If cvNumberLenght > 0 Then
                         scriptNameArray.cvNumber = Mid(strLine, cvLinePos, cvNumberLenght + 3)
                         scriptNameArray.ScriptName = objFile.Name
-                        'When objects are pased as paramenter, ther should be no parentheses
-                        testsScriptlist.Add scriptNameArray
+                        If Not testCasesDic.Exists(scriptNameArray.cvNumber) Then
+                            testCasesDic(scriptNameArray.cvNumber) = scriptNameArray.ScriptName
+                        End If
                     End If
                 End If
             Loop
             ProgressLoadBarModule.ProgressLoad curValue:=numberOfScripts, maxValue:=objFolder.Files.count, progressLabel:="Updating scripts list.... gathering scripts"
         End If
     Next
-    
     ProgressLoadBarModule.closeProgressBar
     readScriptFolder = True
 End Function
 
-Sub checkCurrentMappedTestCases()
+Private Sub checkCurrentMappedTestCases(ByRef testCasesDic As Dictionary)
     lastRowWithCVs = lastRowNumber
     totalTestCases = lastRowWithCVs
     
     For curRowNumber = 2 To lastRowWithCVs
         If Not IsEmpty(Cells(curRowNumber, TESTCASES_WorkItemCN)) Then
             curReqToSearch = Cells(curRowNumber, TESTCASES_WorkItemCN)
-            reqIndex = testsScriptlist.Find(curReqToSearch)
-            If reqIndex >= 0 Then
-                Cells(curRowNumber, TESTCASES_ScriptNameCN) = testsScriptlist.GetScriptName(CInt(reqIndex))
-                testsScriptlist.Remove (reqIndex)
+            If testCasesDic.Exists(curReqToSearch) Then
+                Cells(curRowNumber, TESTCASES_ScriptNameCN) = testCasesDic(curReqToSearch)
+                testCasesDic.Remove (curReqToSearch)
             End If
         End If
-        ProgressLoadBarModule.ProgressLoad curValue:=curRowNumber, maxValue:=totalTestCases, progressLabel:="Updating Test Cases From Scripts"
+        ProgressLoadBarModule.ProgressLoad curValue:=curRowNumber, maxValue:=totalTestCases, progressLabel:="Updating scripts names"
     Next
     ProgressLoadBarModule.closeProgressBar
 End Sub
 
-Sub insertNewTestCases()
+Private Sub insertNewTestCases(ByRef testCasesDic As Dictionary)
     Dim remainingAmountTestCases As Integer
     Dim addedAmountTestCases As Integer
 
-  If testsScriptlist.Size > 0 Then
-        remainingAmountTestCases = testsScriptlist.Size
-        For Each testCase In testsScriptlist.getArray
+  If testCasesDic.count > 0 Then
+        remainingAmountTestCases = testCasesDic.count
+        For Each testCase In testCasesDic.Keys
             lastRowWithCVs = lastRowWithCVs + 1
             addedAmountTestCases = addedAmountTestCases + 1
-            Cells(lastRowWithCVs, TESTCASES_WorkItemCN) = testCase.cvNumber
-            Cells(lastRowWithCVs, TESTCASES_ScriptNameCN) = testCase.ScriptName
-            ProgressLoadBarModule.ProgressLoad curValue:=addedAmountTestCases, maxValue:=remainingAmountTestCases, progressLabel:="Updating Test Cases From Scripts"
+            Cells(lastRowWithCVs, TESTCASES_WorkItemCN) = testCase
+            Cells(lastRowWithCVs, TESTCASES_ScriptNameCN) = testCasesDic(testCase)
+            ProgressLoadBarModule.ProgressLoad curValue:=addedAmountTestCases, maxValue:=remainingAmountTestCases, progressLabel:="Adding missing Test Cases"
         Next
     End If
     ProgressLoadBarModule.closeProgressBar
