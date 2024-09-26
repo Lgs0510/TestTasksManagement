@@ -15,3 +15,12 @@ Public Sub Add(cvObj)
     cvNumber = cvObj.cvNumber
     ScriptName = cvObj.ScriptName
 End Sub
+
+Public Function retrieve() As ScriptNameObj
+    Dim cvObj As New ScriptNameObj
+    
+    cvObj.cvNumber = cvNumber
+    cvObj.ScriptName = ScriptName
+    Set retrieve = cvObj
+End Function
+

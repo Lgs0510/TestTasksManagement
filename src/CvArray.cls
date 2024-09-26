@@ -89,18 +89,18 @@ End Sub
 
 Public Sub Remove(index As Integer)
     Dim i As Integer
-    Dim cpyList() As String
+    Dim cpyList() As New ScriptNameObj
     
     If index < ArraySize Then
         If ArraySize > 0 Then
             ReDim cpyList(ArraySize - 1)
             
             For i = 0 To index - 1
-                cpyList(i) = arrayVar(i)
+                cpyList(i).Add arrayVar(i).retrieve
             Next
                 
             For i = index + 1 To ArraySize - 1
-                cpyList(i - 1) = arrayVar(i)
+                cpyList(i - 1).Add arrayVar(i).retrieve
             Next
             ArraySize = ArraySize - 1
             ScriptNameObj = cpyList
@@ -114,9 +114,11 @@ Public Sub RemoveDuplicates()
     duplListCounter = 0
     If ArraySize > 1 Then
         For Each cv In arrayVar
-            firstMatch = True
-            For i = 0 To ArraySize - 1
-                If cv.cvNumber <> "" Then
+            If cv Is Nothing Then
+                Exit For
+            ElseIf cv.cvNumber <> "" Then
+                firstMatch = True
+                For i = 0 To ArraySize - 1
                     If arrayVar(i).cvNumber = cv.cvNumber Then
                         If Not firstMatch Then
                             duplListCounter = duplListCounter + 1
@@ -125,8 +127,8 @@ Public Sub RemoveDuplicates()
                         End If
                         firstMatch = False
                     End If
-                End If
-            Next
+                Next
+            End If
         Next
         Me.Sort
         ArraySize = ArraySize - duplListCounter
