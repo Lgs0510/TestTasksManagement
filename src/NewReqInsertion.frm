@@ -18,6 +18,13 @@ Attribute VB_Exposed = False
 
 
 
+
+
+'-----------------Button Insert Click (click event)------------------
+'Sub Name:btnInsertion_Click
+'Description: This Sub is called when the text box in import file prompt is clicked.
+'Inputs: ---
+'-----------------------------------------------------------------------------------
 Private Sub btnInsertion_Click()
     Dim curReqList As New list
     Dim testCasesArray() As String
