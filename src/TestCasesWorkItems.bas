@@ -1,9 +1,10 @@
 Attribute VB_Name = "TestCasesWorkItems"
 Sub UpdateOldCvWithNewCv()
     Dim statusToDelete As New list
-    Application.Calculation = xlCalculationManual
-    Application.ScreenUpdating = False
-    g_vbaIsRunning = True
+    Dim calcPrevStatus As XlCalculation
+    
+    calcPrevStatus = Application.Calculation
+    GenericFunctions.uiDisable
     statusToDelete.letList = getTestCasesStatusToRemove
     For Each Worksheet In ActiveWorkbook.Worksheets
         If InStr(Worksheet.Name, "CV-") Then
@@ -22,9 +23,8 @@ Sub UpdateOldCvWithNewCv()
             Next
         End If
     Next
-    Application.Calculation = xlCalculationAutomatic
-    Application.ScreenUpdating = True
-    g_vbaIsRunning = False
+
+    GenericFunctions.uiEnable(calcPrevStatus)
 End Sub
 
 

@@ -37,6 +37,7 @@ Sub DeleteRequirement()
     Dim SheetsList As New list
     Dim WS_Count As Integer
     
+    protectStatus = ActiveSheet.ProtectContents
     WS_Count = ActiveWorkbook.Worksheets.count
 
     For curSheet = 1 To WS_Count
@@ -52,12 +53,10 @@ Sub DeleteRequirement()
                     ActiveWorkbook.Sheets(currentCV).Delete
                     Application.DisplayAlerts = True
                 End If
-                ActiveSheet.Unprotect (sheetsProtectionPassword)
+                GenericFunctions.UnprotectSheet
                 ActiveWorkbook.Sheets("Trace").Rows(ActiveCell.Row).EntireRow.Delete
-                ActiveSheet.Protect _
-                    Password:=sheetsProtectionPassword, _
-                    AllowFiltering:=True, _
-                    AllowSorting:=True
+
+                GenericFunctions.ProtectSheet(protectStatus)
             End If
         End If
     End If

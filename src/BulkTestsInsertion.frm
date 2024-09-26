@@ -21,6 +21,7 @@ Attribute VB_Exposed = False
 
 
 
+
 '----------------- Public Local Variables----------------
 Dim firstKeyPress As Boolean
 Dim testsList() As String
@@ -82,10 +83,11 @@ Private Sub Page2_Add_btn_Click()
     Dim testsArray() As New TestCaseObj
     Dim i As Integer
     Dim testCasesSheetCVs() As String
-        
-    Application.Calculation = xlCalculationManual
-    Application.ScreenUpdating = False
-    g_vbaIsRunning = True
+    Dim calcPrevStatus As XlCalculation
+    
+    calcPrevStatus = Application.Calculation
+    GenericFunctions.uiDisable
+
     ReDim testsArray(0 To SizeOfArray(testsList) - 2)
     For i = 0 To SizeOfArray(testsArray) - 1
         testsArray(i).cvNumber = testsList(i + 1, 0)
@@ -102,9 +104,7 @@ Private Sub Page2_Add_btn_Click()
     A = updateTestCasesSheet(allTestsList, testCasesSheetCVs)
     updateTestCasesCVs allTestsList
     
-    Application.Calculation = xlCalculationAutomatic
-    Application.ScreenUpdating = True
-    g_vbaIsRunning = False
+    GenericFunctions.uiEnable(calcPrevStatus)
     Unload Me
 End Sub
 

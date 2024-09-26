@@ -1,11 +1,7 @@
 Private Sub Worksheet_Activate()
     If Not g_vbaIsRunning Then
-        Application.Calculation = xlCalculationAutomatic
-        Application.ScreenUpdating = True
-        ActiveSheet.Protect _
-            Password:=sheetsProtectionPassword, _
-            AllowFiltering:=True, _
-            AllowSorting:=True
+        GenericFunctions.uiEnable(True)
+        GenericFunctions.ProtectSheet(True)
     End If
 End Sub
 

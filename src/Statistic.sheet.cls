@@ -1,7 +1,6 @@
 Private Sub Worksheet_Activate()
     If Not g_vbaIsRunning Then
-        Application.Calculation = xlCalculationAutomatic
-        Application.ScreenUpdating = True
+        GenericFunctions.uiEnable(true)
     End If
 End Sub
 

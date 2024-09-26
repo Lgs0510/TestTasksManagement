@@ -22,6 +22,8 @@ Private Sub btnInsertion_Click()
     Dim curReqList As New list
     Dim testCasesArray() As String
     Dim overwriteAnswer As VbMsgBoxResult
+
+    protectStatus = ActiveSheet.ProtectContents
     
     If Not IsNumeric(txtBoxCvNumber) & Len(txtBoxCvNumber) > 0 Then
         MsgBox ("CV Number invalid! Only numbers!")
@@ -62,15 +64,13 @@ Private Sub btnInsertion_Click()
             Exit Sub
         End If
     End If
-    ActiveSheet.Unprotect (sheetsProtectionPassword)
+    GenericFunctions.UnprotectSheet
     If overwriteAnswer = 0 Then
         Cells(rowToUpdate, TRACE_CvNumberCN).value = txtBoxCvNumber
     End If
     Cells(rowToUpdate, TRACE_LinkedWorkItemsCN).value = txtBoxLinkedWI
-    ActiveSheet.Protect _
-        Password:=sheetsProtectionPassword, _
-        AllowFiltering:=True, _
-        AllowSorting:=True
+    GenericFunctions.ProtectSheet(protectStatus)
+
     InitializeWorkBook.InitializeWorkBook
     Unload Me
 End Sub

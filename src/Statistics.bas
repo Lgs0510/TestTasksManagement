@@ -13,10 +13,10 @@ Attribute VB_Name = "Statistics"
 Sub getTestStatistict()
     Dim cvList As New TestCasesList
     Dim testCase As New TestCaseObj
+    Dim calcPrevStatus As XlCalculation
     
-    Application.Calculation = xlCalculationManual
-    Application.ScreenUpdating = False
-    g_vbaIsRunning = True
+    calcPrevStatus = Application.Calculation
+    GenericFunctions.uiDisable
     For Each Worksheet In ActiveWorkbook.Worksheets
         If InStr(Worksheet.Name, "CV-") Then
             Worksheet.Activate
@@ -30,9 +30,8 @@ Sub getTestStatistict()
             Wend
         End If
     Next
-    Application.Calculation = xlCalculationAutomatic
-    Application.ScreenUpdating = True
-    g_vbaIsRunning = False
+    
+    GenericFunctions.uiEnable(calcPrevStatus)
     cvList.RemoveDuplicates
     ActiveWorkbook.Worksheets("Statistics").Activate
     Range("B46").Select

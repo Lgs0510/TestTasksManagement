@@ -7,17 +7,16 @@ Attribute VB_Name = "InitializeWorkBook"
 Sub InitializeWorkBook()
     'Constants based on the Trace tab
 
-        
     Dim WS_Count As Integer
     Dim curSheet As Integer
     Dim SheetsList As New list, sheetsToCreateList As New list
     Dim linkedReqs As Variant, linkedTests() As String
     Dim testCasesSheetCVs() As String
     Dim allTestsList As New list
+    Dim calcPrevStatus As XlCalculation
     
-    Application.Calculation = xlCalculationManual
-    Application.ScreenUpdating = False
-    g_vbaIsRunning = True
+    calcPrevStatus = Application.Calculation
+    GenericFunctions.uiDisable
     ' Set WS_Count equal to the number of worksheets in the active
     ' workbook.
     WS_Count = ActiveWorkbook.Worksheets.count
@@ -96,9 +95,7 @@ Sub InitializeWorkBook()
     End If
     MsgBox "End of CV-Number Collumn"
     
-    Application.Calculation = xlCalculationAutomatic
-    Application.ScreenUpdating = True
-    g_vbaIsRunning = False
+    GenericFunctions.uiEnable(calcPrevStatus)
 End Sub
 
 '--------------------------------------------------------
@@ -266,7 +263,7 @@ Sub createNewSheets(currentCVNumber As list)
     On Error GoTo ErrorHandler
     
     prepareSheetTemplate
-    For Each CV In currentCVNumber.getList
+    For Each cv In currentCVNumber.getList
         Set NewSheet = ActiveWorkbook.Worksheets.Add(After:=ActiveWorkbook.Worksheets(ActiveWorkbook.Worksheets.count))
         NewSheet.Name = cv
         applySheetTemplate (cv)
@@ -276,7 +273,7 @@ Sub createNewSheets(currentCVNumber As list)
     
     Exit Sub
 ErrorHandler:
-        MsgBox ("There is some sheet already named: " + CV + " Please delete/rename it and try again!")
+        MsgBox ("There is some sheet already named: " + cv + " Please delete/rename it and try again!")
     Resume Next
 End Sub
 Function sheetExists(some_sheet As String) As Boolean

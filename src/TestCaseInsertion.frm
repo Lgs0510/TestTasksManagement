@@ -20,16 +20,17 @@ Attribute VB_Exposed = False
 
 
 
+
 Private Sub btnInsertion_Click()
     'Insert Button
     Dim curReqList As New list
     Dim testCasesArray() As String
     Dim testCaseCv As New TestCaseObj
+    Dim calcPrevStatus As XlCalculation
     
-    
-    Application.Calculation = xlCalculationManual
-    Application.ScreenUpdating = False
-    g_vbaIsRunning = True
+
+    protectionStatus = ActiveSheet.ProtectContents
+    GenericFunctions.uiDisable
     
     selectedRow = Selection.Row
     firstEmptyRow = lastRowNumber + 1
@@ -76,8 +77,8 @@ Private Sub btnInsertion_Click()
     Else
         selectedRow = firstEmptyRow
     End If
-    
-    ActiveSheet.Unprotect (sheetsProtectionPassword)
+    calcPrevStatus = Application.Calculation
+    GenericFunctions.UnprotectSheet
     Cells(selectedRow, TESTCASES_WorkItemCN) = "CV-" + txtBoxCvNumber
     If Len(txtBoxOldCvNumber) > 0 Then
         Cells(selectedRow, TESTCASES_OldCvCN) = "CV-" + txtBoxOldCvNumber
@@ -93,10 +94,8 @@ Private Sub btnInsertion_Click()
     End Select
 
     strTestResult = Cells(selectedRow, TESTCASES_StatusCN)
-    ActiveSheet.Protect _
-        Password:=sheetsProtectionPassword, _
-        AllowFiltering:=True, _
-        AllowSorting:=True
+
+    GenericFunctions.ProtectSheet (protectionStatus)
         
     testCaseCv.cvNumber = "CV-" + txtBoxCvNumber
     If Len(txtBoxOldCvNumber) > 0 Then
@@ -109,9 +108,7 @@ Private Sub btnInsertion_Click()
         updateTestCasesCVs testCaseCv
     End If
     
-    Application.Calculation = xlCalculationAutomatic
-    Application.ScreenUpdating = True
-    g_vbaIsRunning = False
+    GenericFunctions.uiEnable(calcPrevStatus)
     Unload Me
 End Sub
 

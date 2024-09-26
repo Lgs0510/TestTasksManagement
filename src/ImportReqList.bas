@@ -21,11 +21,9 @@ Sub ImportMainReqs()
     Dim protectStatus As Boolean
     Dim overwriteAnswer As VbMsgBoxResult
     Dim overwriteAllAnswer As VbMsgBoxResult
-    
-    ActiveWorkbook.Worksheets("Trace").Activate
-    Application.Calculation = xlCalculationManual
-    Application.ScreenUpdating = False
-    g_vbaIsRunning = True
+    Dim calcPrevStatus As XlCalculation
+
+    GenericFunctions.uiDisable
     protectStatus = ActiveSheet.ProtectContents
     Set csvReqs = ImportCsvRequirements
     If csvReqs Is Nothing Then
@@ -34,7 +32,8 @@ Sub ImportMainReqs()
     LastRow = lastRowNumber
     curTraceReqlist.letList = readTraceSheetReqs
     For Each req In csvReqs.getReqListNO
-        UnprotectSheet (True)
+        calcPrevStatus = Application.Calculation
+        GenericFunctions.UnprotectSheet
         If Not curTraceReqlist.Contains(Replace(req, "CV-", "")) Then
             LastRow = lastRowNumber
             Cells(LastRow + 1, TRACE_CvNumberCN) = req
@@ -65,9 +64,8 @@ Sub ImportMainReqs()
         ActiveWorkbook.Worksheets("Trace").Activate
         Cells(curentRowNmb, TRACE_LinkedWorkItemsCN) = csvReqs.getReqLikedWkItems("CV-" + req)
     Next
-    ProtectSheet (protectStatus)
-    Application.Calculation = xlCalculationAutomatic
-    Application.ScreenUpdating = True
+    GenericFunctions.ProtectSheet (protectStatus)
+    GenericFunctions.uiEnable(calcPrevStatus)
+
     InitializeWorkBook.InitializeWorkBook
-    g_vbaIsRunning = False
 End Sub

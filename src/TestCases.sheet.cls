@@ -1,11 +1,7 @@
 Private Sub Worksheet_Activate()
     If Not g_vbaIsRunning Then
-        Application.Calculation = xlCalculationAutomatic
-        Application.ScreenUpdating = True
-        ActiveSheet.Protect _
-            Password:=sheetsProtectionPassword, _
-            AllowFiltering:=True, _
-            AllowSorting:=True
+        GenericFunctions.uiEnable(True)
+        GenericFunctions.ProtectSheet (True)
     End If
 End Sub
 
@@ -23,24 +19,17 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     protectionStatus = ActiveSheet.ProtectContents
     Dim calcPrevStatus As XlCalculation
     Dim screenPrevUpdate As Boolean
-    g_vbaIsRunning = True
-
+    
     calcPrevStatus = Application.Calculation
-    screenPrevUpdate = Application.ScreenUpdating
-    Application.Calculation = xlCalculationManual
-    Application.ScreenUpdating = False
-    UnprotectSheet (protectionStatus)
+    GenericFunctions.uiDisable
+    GenericFunctions.UnprotectSheet
     For Each cell In Target
         If cell <> "" Then
-            
             Cells(cell.Row, 5).value = Date
         End If
     Next
-    Application.Calculation = calcPrevStatus
-    Application.ScreenUpdating = screenPrevUpdate
-    ProtectSheet (protectionStatus)
-    Application.EnableEvents = True
-    g_vbaIsRunning = False
+    GenericFunctions.ProtectSheet (protectionStatus)
+    GenericFunctions.uiEnable (calcPrevStatus)
     Cancel = True
 End Sub
 

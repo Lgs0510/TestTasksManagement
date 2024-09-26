@@ -71,10 +71,8 @@ End Function
 'Description: This function is responsible for unprotec the active sheet if its parameter, protStatus is True.
 'Inputs: protStatus: boolean flag to indicated if the active sheet is protected;
 '-----------------------------------------------------------------------------------
-Public Sub UnprotectSheet(protStatus)
-        If protStatus Then
-            ActiveSheet.Unprotect (sheetsProtectionPassword)
-        End If
+Public Sub UnprotectSheet()
+        ActiveSheet.Unprotect (sheetsProtectionPassword)
 End Sub
 
 
@@ -111,8 +109,41 @@ Public Function sheetExist(sheetName As String) As Boolean
 End Function
 
 
-
-
+'-----------------------------------Last Row Number---------------------------------
+'Function Name:lastRowNumber
+'Description: This function is responsible for get the last row with data in the current active sheet
+'Output: integer with the last row number
+'-----------------------------------------------------------------------------------
 Public Function lastRowNumber() As Integer
     lastRowNumber = ActiveSheet.Range("A" & ActiveSheet.Rows.count).End(xlUp).Row
 End Function
+
+
+
+'--------------------------------User Interface Disable-----------------------------
+'Sub Name:uiDisable
+'Description: This sub is responsible for disable the screen update, the events and the automatic calculation, in order to gain speed for some heavy processing
+'Inputs:--
+'-----------------------------------------------------------------------------------
+Sub uiDisable()
+        Application.Calculation = xlCalculationManual
+        Application.ScreenUpdating = False
+        Application.EnableEvents = False
+        g_vbaIsRunning = True
+End Sub
+
+
+'--------------------------------User Interface Enable-----------------------------
+'Sub Name:uiEnable
+'Description: This sub is responsible for enable the screen update, the events and the automatic calculation, in order to recovery the normal operation
+'Inputs:--
+'-----------------------------------------------------------------------------------
+Sub uiEnable(calStatus)
+        If calStatus Then
+            Application.Calculation = xlCalculationAutomatic
+            Application.ScreenUpdating = True
+            Application.EnableEvents = True
+            g_vbaIsRunning = False
+        End If
+End Sub
+

@@ -16,7 +16,8 @@ Attribute VB_Name = "TestCaseSheet"
 Public Function updateTestCasesSheet_CvOnly(newTestCasesList As list, testCasesSheetList() As String)
     Dim tCSLcopy As New list
     Dim cvSpaceless As String
-        
+    
+    protectStatus = ActiveSheet.ProtectContents
     If IsNull(newTestCasesList) Or newTestCasesList.Size <= 0 Then
         Exit Function
     End If
@@ -43,12 +44,13 @@ Public Function updateTestCasesSheet_CvOnly(newTestCasesList As list, testCasesS
         ActiveWorkbook.Worksheets("TestCases").Activate
         lastCellAddress = "A" + CStr(tCSLcopy.Size + 2) + ":A" + CStr(tCSLcopy.Size + 1 + newTestCasesList.Size)
         Range(lastCellAddress).Select
-        ActiveSheet.Unprotect (sheetsProtectionPassword)
+        
+        GenericFunctions.UnprotectSheet
+
         Range(lastCellAddress).value = Application.Transpose(newTestCasesList.getList)
-        ActiveSheet.Protect _
-            Password:=sheetsProtectionPassword, _
-            AllowFiltering:=True, _
-            AllowSorting:=True
+        
+        GenericFunctions.ProtectSheet(protectStatus)
+
         updateNewCVsFormulas
     End If
 End Function
@@ -66,6 +68,8 @@ Public Function updateTestCasesSheet(newTestCasesList As TestCasesList, testCase
     Dim tCSLcopy As New list
     Dim cvSpaceless As String
         
+    protectStatus = ActiveSheet.ProtectContents
+
     If IsNull(newTestCasesList) Or newTestCasesList.Size <= 0 Then
         Exit Function
     End If
@@ -92,19 +96,19 @@ Public Function updateTestCasesSheet(newTestCasesList As TestCasesList, testCase
         ActiveWorkbook.Worksheets("TestCases").Activate
         lastCellAddress = "A" + CStr(tCSLcopy.Size + 2)
         Range(lastCellAddress).Select
-        ActiveSheet.Unprotect (sheetsProtectionPassword)
-        For Each CV In newTestCasesList.getArray
-            ActiveCell.value = CV.cvNumber
+        
+        GenericFunctions.UnprotectSheet
+        For Each cv In newTestCasesList.getArray
+            ActiveCell.value = cv.cvNumber
             ActiveCell.Offset(0, 1).Select
             ActiveCell.value = CV.testStatus
             ActiveCell.Offset(0, 1).Select
             ActiveCell.value = CV.cvOld
             ActiveCell.Offset(1, -2).Select
         Next
-        ActiveSheet.Protect _
-            Password:=sheetsProtectionPassword, _
-            AllowFiltering:=True, _
-            AllowSorting:=True
+        
+        GenericFunctions.ProtectSheet(protectStatus)
+
         updateNewCVsFormulas
     End If
 End Function
@@ -197,6 +201,8 @@ Public Sub deleteTestCases()
     Dim listToKeep As New list
     Dim listOfDeletedCVs As New list
 
+
+    protectStatus = ActiveSheet.ProtectContents
     If ActiveSheet.Name = "TestCases" Then
         For Each Line In Selection
             If Line.Column = 1 Then
@@ -211,16 +217,14 @@ Public Sub deleteTestCases()
         Next
         If listToDelete.Size > 0 Then
             listToDelete.SortUpSideDown
-            ActiveSheet.Unprotect (sheetsProtectionPassword)
+            GenericFunctions.UnprotectSheet
             For Each Line In listToDelete.getList
                 If Line > 0 Then
                     Range("A" + Line).EntireRow.Delete
                 End If
             Next
-            ActiveSheet.Protect _
-                Password:=sheetsProtectionPassword, _
-                AllowFiltering:=True, _
-                AllowSorting:=True
+            GenericFunctions.ProtectSheet(protectStatus)
+
             updateNewCVsFormulas
             removeTestCasesCVs listOfDeletedCVs.getList
         End If
@@ -260,12 +264,10 @@ End Sub
 'Inputs: --
 '-----------------------------------------------------------------------------------
 Sub updateNewCVsFormulas()
-            ActiveSheet.Unprotect (sheetsProtectionPassword)
-            Range("D2").Copy
-            Range("D3:D" + CStr(lastRowNumber + 1000)).PasteSpecial
-            
-            ActiveSheet.Protect _
-                Password:=sheetsProtectionPassword, _
-                AllowFiltering:=True, _
-                AllowSorting:=True
+        protectStatus = ActiveSheet.ProtectContents
+        GenericFunctions.UnprotectSheet
+        Range("D2").Copy
+        Range("D3:D" + CStr(lastRowNumber + 1000)).PasteSpecial
+        
+        GenericFunctions.ProtectSheet(protectStatus)
 End Sub
