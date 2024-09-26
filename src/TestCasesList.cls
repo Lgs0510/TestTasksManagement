@@ -121,9 +121,8 @@ Public Sub RemoveDuplicates()
             firstMatch = True
             If cv Is Nothing Then
                 Exit For
-            End If
-            For i = 0 To listSize - 1
-                If cv.cvNumber <> "" Then
+            ElseIf cv.cvNumber <> "" Then
+                For i = 0 To listSize - 1
                     If testLists(i).cvNumber = cv.cvNumber Then
                         If Not firstMatch Then
                             duplListCounter = duplListCounter + 1
@@ -133,8 +132,8 @@ Public Sub RemoveDuplicates()
                         End If
                         firstMatch = False
                     End If
-                End If
-            Next
+                Next
+            End If
         Next
         Me.Sort
         listSize = listSize - duplListCounter

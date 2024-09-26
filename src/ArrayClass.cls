@@ -110,9 +110,11 @@ Public Sub RemoveDuplicates()
     duplListCounter = 0
     If ArraySize > 1 Then
         For Each cv In arrayVar
-            firstMatch = True
-            For i = 0 To ArraySize - 1
-                If cv <> "" Then
+            If cv Is Nothing Then
+                Exit For
+            ElseIf cv <> "" Then
+                firstMatch = True
+                For i = 0 To ArraySize - 1
                     If arrayVar(i) = cv Then
                         If Not firstMatch Then
                             duplListCounter = duplListCounter + 1
@@ -120,8 +122,8 @@ Public Sub RemoveDuplicates()
                         End If
                         firstMatch = False
                     End If
-                End If
-            Next
+                Next
+            End If
         Next
         Me.Sort
         ArraySize = ArraySize - duplListCounter
