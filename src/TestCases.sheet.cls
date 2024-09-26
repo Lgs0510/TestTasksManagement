@@ -1,4 +1,9 @@
 Private Sub Worksheet_Activate()
+
+    ActiveWorkbook.Sheets("TestCases").ProgressBarTestCases.Visible = False
+    ActiveWorkbook.Sheets("TestCases").ProgressBar_Label.Visible = False
+    ActiveWorkbook.Sheets("TestCases").ProgressBar_percentage.Visible = False
+    
     If Not g_vbaIsRunning Then
         GenericFunctions.uiEnable(True)
         GenericFunctions.ProtectSheet (True)

@@ -1,4 +1,9 @@
 Attribute VB_Name = "UpdateScriptsList"
+
+
+Dim scriptNameArray As New ScriptNameObj
+Dim testsScriptlist As New CvArray
+
 '--------------------------------------------------------
 '--------------------- Private Subs ---------------------
 '--------------------------------------------------------
@@ -10,35 +15,54 @@ Attribute VB_Name = "UpdateScriptsList"
 'Inputs: ---
 '---------------------------------------------------------------------------------------------
 Sub UpdateScriptsList()
-    Dim bDoneStatus As Boolean
-    Dim debugVar As Boolean
-    Dim scriptNameArray As New ScriptNameObj
-    Dim testsScriptlist As New CvArray
+    Dim calcPrevStatus As XlCalculation
     
-    Set objFSO = CreateObject("Scripting.FileSystemObject")
+    If readScriptFolder Then
+        protectionStatus = ActiveSheet.ProtectContents
+        calcPrevStatus = Application.Calculation
+        GenericFunctions.UnprotectSheet
+        testsScriptlist.RemoveDuplicates
 
-    numberOfCvs = Range("I5").value
+        GenericFunctions.uiDisable
+        
+        checkCurrentMappedTestCases
+
+        insertNewTestCases
+        
+        GenericFunctions.uiEnable(calcPrevStatus)
+
+        GenericFunctions.ProtectSheet (protectionStatus)
+        MsgBox "Script List Updated!"
+    End If
+    
+End Sub
+
+Private Function readScriptFolder() As Boolean
+    Set objFSO = CreateObject("Scripting.FileSystemObject")
     
     SelectFolder.Show
     scriptFolder = DataComm.dataChannel.getData
     If scriptFolder = "" Then
         MsgBox ("Invalid path")
-        Exit Sub
+        readScriptFolder = False
+        Exit Function
     ElseIf Not objFSO.FolderExists(scriptFolder) Then
         MsgBox ("Invalid path")
-        Exit Sub
+        readScriptFolder = False
+        Exit Function
     End If
     
-    Application.StatusBar = "Updating scripts list.... gathering data"
     Set objFolder = objFSO.GetFolder(scriptFolder)
+    ProgressLoadBarModule.ProgressLoad curValue:=0, maxValue:=objFolder.Files.count, progressLabel:="Updating scripts list.... gathering scripts"
     For Each objFile In objFolder.Files
         If LCase(Right(objFile.Path, 4)) = ".txt" Then
+            numberOfScripts = numberOfScripts + 1
             Set objCurScriptToRead = CreateObject("Scripting.FileSystemObject").OpenTextFile(objFile, 1, True)
-            Do Until (objCurScriptToRead.AtEndOfStream Or bDoneStatus)
+            Do Until (objCurScriptToRead.AtEndOfStream)
                 strLine = objCurScriptToRead.ReadLine
                 cvLinePos = InStr(strLine, "CV-")
+                cvNumberLenght = GLOBAL_cvMaxNumberLenght
                 If cvLinePos > 0 Then
-                    
                     While (Not IsNumeric(Mid(strLine, cvLinePos + 2 + cvNumberLenght, 1))) And (cvNumberLenght > 0)
                         cvNumberLenght = cvNumberLenght - 1
                     Wend
@@ -47,35 +71,48 @@ Sub UpdateScriptsList()
                         scriptNameArray.ScriptName = objFile.Name
                         'When objects are pased as paramenter, ther should be no parentheses
                         testsScriptlist.Add scriptNameArray
-                        numberOfCvs = numberOfCvs + 1
                     End If
                 End If
             Loop
+            ProgressLoadBarModule.ProgressLoad curValue:=numberOfScripts, maxValue:=objFolder.Files.count, progressLabel:="Updating scripts list.... gathering scripts"
         End If
     Next
-    ActiveSheet.Unprotect (sheetsProtectionPassword)
-    Application.Calculation = xlCalculationManual
-    Application.ScreenUpdating = False
-    Application.EnableEvents = False
-    g_vbaIsRunning = True
-    For curRowNumber = 2 To numberOfCvs
+    
+    ProgressLoadBarModule.closeProgressBar
+    readScriptFolder = True
+End Function
+
+Sub checkCurrentMappedTestCases()
+    lastRowWithCVs = lastRowNumber
+    totalTestCases = lastRowWithCVs
+    
+    For curRowNumber = 2 To lastRowWithCVs
         If Not IsEmpty(Cells(curRowNumber, TESTCASES_WorkItemCN)) Then
             curReqToSearch = Cells(curRowNumber, TESTCASES_WorkItemCN)
             reqIndex = testsScriptlist.Find(curReqToSearch)
             If reqIndex >= 0 Then
                 Cells(curRowNumber, TESTCASES_ScriptNameCN) = testsScriptlist.GetScriptName(CInt(reqIndex))
+                testsScriptlist.Remove (reqIndex)
             End If
         End If
-        'Application.StatusBar = "Updating scripts list.... " + CStr(100 * curRowNumber / numberOfCvs) + "%"
+        ProgressLoadBarModule.ProgressLoad curValue:=curRowNumber, maxValue:=totalTestCases, progressLabel:="Updating Test Cases From Scripts"
     Next
-    Application.Calculation = xlCalculationAutomatic
-    Application.ScreenUpdating = True
-    Application.EnableEvents = True
-    ActiveSheet.Protect _
-        Password:=sheetsProtectionPassword, _
-        AllowFiltering:=True, _
-        AllowSorting:=True
-    Application.StatusBar = False
-    g_vbaIsRunning = False
-    MsgBox "Script List Updated!"
+    ProgressLoadBarModule.closeProgressBar
+End Sub
+
+Sub insertNewTestCases()
+    Dim remainingAmountTestCases As Integer
+    Dim addedAmountTestCases As Integer
+
+  If testsScriptlist.Size > 0 Then
+        remainingAmountTestCases = testsScriptlist.Size
+        For Each testCase In testsScriptlist.getArray
+            lastRowWithCVs = lastRowWithCVs + 1
+            addedAmountTestCases = addedAmountTestCases + 1
+            Cells(lastRowWithCVs, TESTCASES_WorkItemCN) = testCase.cvNumber
+            Cells(lastRowWithCVs, TESTCASES_ScriptNameCN) = testCase.ScriptName
+            ProgressLoadBarModule.ProgressLoad curValue:=addedAmountTestCases, maxValue:=remainingAmountTestCases, progressLabel:="Updating Test Cases From Scripts"
+        Next
+    End If
+    ProgressLoadBarModule.closeProgressBar
 End Sub
