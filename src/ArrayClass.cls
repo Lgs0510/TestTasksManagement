@@ -110,7 +110,7 @@ Public Sub RemoveDuplicates()
     duplListCounter = 0
     If ArraySize > 1 Then
         For Each cv In arrayVar
-            If cv Is Nothing Then
+            If IsEmpty(cv) Then
                 Exit For
             ElseIf cv <> "" Then
                 firstMatch = True

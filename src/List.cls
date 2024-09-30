@@ -176,7 +176,7 @@ Public Sub RemoveDuplicates()
     duplListCounter = 0
     If listSize > 1 Then
         For Each cv In list
-            If cv Is Nothing Then
+            If IsEmpty(cv) Then
                 Exit For
             ElseIf cv <> "" Then
                 firstMatch = True
