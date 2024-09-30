@@ -30,8 +30,8 @@ Public Sub closeProgressBar()
     ActiveWorkbook.Sheets("TestCases").ProgressBarLoad.Visible = False
     ActiveWorkbook.Sheets("TestCases").ProgressBar_Label.Visible = False
     ActiveWorkbook.Sheets("TestCases").ProgressBar_percentage.Visible = False
-    
     ProgressBarStatus = False
+    
 End Sub
 
 
@@ -49,7 +49,7 @@ Private Sub openProgressBar(barLabel As String)
         ActiveWorkbook.Sheets("TestCases").ProgressBar_Label.Top = 60
         ActiveWorkbook.Sheets("TestCases").ProgressBar_percentage.Visible = True
         ActiveWorkbook.Sheets("TestCases").ProgressBar_percentage.Top = 80
-        Application.Wait (Now + TimeValue("00:00:01"))
+        Application.Wait (Now + 10 * milisecond)
         ProgressBarStatus = True
 End Sub
 
