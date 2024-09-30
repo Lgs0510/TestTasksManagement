@@ -16,7 +16,8 @@ Sub UpdateScriptsList()
     Dim calcPrevStatus As XlCalculation
     Dim debugList As New list
     
-    GenericFunctions.uiEnable (True)
+    calcPrevStatus = Application.Calculation
+    GenericFunctions.uiDisable
     
     If readScriptFolder(scriptsTestCases) Then
         protectionStatus = ActiveSheet.ProtectContents
@@ -31,6 +32,8 @@ Sub UpdateScriptsList()
         GenericFunctions.ProtectSheet (protectionStatus)
         MsgBox "Script List Updated!"
     End If
+    
+    GenericFunctions.uiEnable (calcPrevStatus)
     
 End Sub
 
@@ -101,8 +104,9 @@ End Sub
 Private Sub insertNewTestCases(ByRef testCasesDic As Dictionary)
     Dim remainingAmountTestCases As Integer
     Dim addedAmountTestCases As Integer
-
-  If testCasesDic.count > 0 Then
+        
+    lastRowWithCVs = lastRowNumber
+    If testCasesDic.count > 0 Then
         remainingAmountTestCases = testCasesDic.count
         For Each testCase In testCasesDic.Keys
             lastRowWithCVs = lastRowWithCVs + 1
