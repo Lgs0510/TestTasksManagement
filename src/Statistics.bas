@@ -34,7 +34,7 @@ Sub getTestStatistict()
     GenericFunctions.uiEnable(calcPrevStatus)
     cvList.RemoveDuplicates
     ActiveWorkbook.Worksheets("Statistics").Activate
-    Range("B46").Select
+    Range("B47").Select
     ActiveCell.value = cvList.Size
     getAprovedTestCases cvList
     getReprovedTestCases cvList
@@ -50,7 +50,7 @@ End Sub
 Sub getAprovedTestCases(testList)
     Dim cvList As New ArrayClass
 
-    Range("B47").Select
+    Range("B48").Select
     ActiveCell.value = testList.CountApprovedTests
 End Sub
 
@@ -63,7 +63,7 @@ End Sub
 Sub getReprovedTestCases(testList)
     Dim cvList As New ArrayClass
 
-    Range("B48").Select
+    Range("B49").Select
     ActiveCell.value = testList.CountReprovedTests
 End Sub
 
@@ -77,7 +77,7 @@ End Sub
 Sub getNotTestedCases(testList)
     Dim cvList As New ArrayClass
 
-    Range("B49").Select
+    Range("B50").Select
     ActiveCell.value = testList.CountNotTested
 End Sub
 
