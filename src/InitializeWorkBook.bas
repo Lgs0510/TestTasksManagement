@@ -64,22 +64,24 @@ Sub InitializeWorkBook()
         If Not IsEmpty(Cells(curRowNumber, TRACE_CvNumberCN)) Then
             If Not IsEmpty(Cells(curRowNumber, TRACE_LinkedWorkItemsCN)) Then
                 currentCV = Cells(curRowNumber, TRACE_WorkItemCN)
-                If sheetsToCreateList.Contains(currentCV) Then
-                    linkedReqsList = Cells(curRowNumber, TRACE_LinkedWorkItemsCN)
-                    linkedTests = ReadLinkedTests(linkedReqsList)
-                    linkedReqs = ReadLinkedReqs(linkedReqsList)
-                    If SheetsList.Contains(currentCV) Then
-                        ActiveWorkbook.Worksheets(currentCV).Activate
+                If Not IsEmpty(currentCV) Then
+                    If sheetsToCreateList.Contains(currentCV) Then
+                        linkedReqsList = Cells(curRowNumber, TRACE_LinkedWorkItemsCN)
+                        linkedTests = ReadLinkedTests(linkedReqsList)
+                        linkedReqs = ReadLinkedReqs(linkedReqsList)
+                        If SheetsList.Contains(currentCV) Then
+                            ActiveWorkbook.Worksheets(currentCV).Activate
+                            If arrayEmptyCheck(linkedTests) = 0 Then
+                                fillTestCases (linkedTests)
+                            End If
+                            
+                            If arrayEmptyCheck(linkedReqs) = 0 Then
+                                fillSubRequirements (linkedReqs)
+                            End If
+                        End If
                         If arrayEmptyCheck(linkedTests) = 0 Then
-                            fillTestCases (linkedTests)
+                            allTestsList.AddArray (linkedTests)
                         End If
-                        
-                        If arrayEmptyCheck(linkedReqs) = 0 Then
-                            fillSubRequirements (linkedReqs)
-                        End If
-                    End If
-                    If arrayEmptyCheck(linkedTests) = 0 Then
-                        allTestsList.AddArray (linkedTests)
                     End If
                 End If
             End If
@@ -95,7 +97,7 @@ Sub InitializeWorkBook()
     End If
     MsgBox "End of CV-Number Collumn"
     
-    GenericFunctions.uiEnable(calcPrevStatus)
+    GenericFunctions.uiEnable (calcPrevStatus)
 End Sub
 
 '--------------------------------------------------------
