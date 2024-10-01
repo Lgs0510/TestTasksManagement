@@ -31,12 +31,15 @@ Sub ImportMainReqs()
     End If
     LastRow = lastRowNumber
     curTraceReqlist.letList = readTraceSheetReqs
+    curTraceReqlist.Sort
     For Each req In csvReqs.getReqListNO
         calcPrevStatus = Application.Calculation
         GenericFunctions.UnprotectSheet
         If Not curTraceReqlist.Contains(Replace(req, "CV-", "")) Then
             LastRow = lastRowNumber
             Cells(LastRow + 1, TRACE_CvNumberCN) = req
+            Cells(LastRow, TRACE_WorkItemCN).Formula2R1C1Local = Trace_WorkItemFormula_00 & Trace_WorkItemFormula_01 & Trace_WorkItemFormula_02 & Trace_WorkItemFormula_03
+            Cells(LastRow, TRACE_TestStatusCN).Formula2R1C1Local = Trace_TestStatusFormula_00 & Trace_TestStatusFormula_01 & Trace_TestStatusFormula_02 & Trace_TestStatusFormula_03 & Trace_TestStatusFormula_04
             LastRow = LastRow + 1
             curentRowNmb = LastRow
         Else
