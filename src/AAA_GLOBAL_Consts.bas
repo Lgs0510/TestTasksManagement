@@ -24,6 +24,7 @@ Public Const CVs_SHEETS_TestCvCN = 2
 Public Const CVs_SHEETS_StatusCN = 3
 Public Const CVs_SHEETS_OldCvCN = 4
 Public Const CVs_SHEETS_NewCvCN = 5
+Public Const CVs_SHEETS_CvNumberCL = "A"
 Public Const CVs_SHEETS_TestCvCL = "B"
 Public Const CVs_SHEETS_StatusCL = "C"
 Public Const CVs_SHEETS_OldCvCL = "D"

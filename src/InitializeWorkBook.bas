@@ -30,7 +30,6 @@ Sub InitializeWorkBook()
                 WS_Count = WS_Count - 1
             Else
                 SheetsList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
-                sheetsToCreateList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
             End If
         End If
     Next
@@ -43,8 +42,6 @@ Sub InitializeWorkBook()
             If Not SheetsList.Contains(currentCV) Then
                 SheetsList.Add (currentCV)
                 sheetsToCreateList.Add (currentCV)
-            Else
-                sheetsToCreateList.RemoveStr (currentCV)
             End If
         Else
             Exit For
@@ -54,10 +51,6 @@ Sub InitializeWorkBook()
     SheetsList.RemoveStr ("Trace")
     SheetsList.RemoveStr ("TestCases")
     SheetsList.RemoveStr ("Statistics")
-    sheetsToCreateList.RemoveStr ("Sample")
-    sheetsToCreateList.RemoveStr ("Trace")
-    sheetsToCreateList.RemoveStr ("TestCases")
-    sheetsToCreateList.RemoveStr ("Statistics")
     createNewSheets sheetsToCreateList
     For curRowNumber = 2 To 10000
         ActiveWorkbook.Worksheets("Trace").Activate

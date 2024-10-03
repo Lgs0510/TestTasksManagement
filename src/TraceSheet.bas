@@ -44,8 +44,8 @@ Sub DeleteRequirement()
         SheetsList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
     Next
     If ActiveCell.Row > 1 Then
-        currentCV = Range(CVs_SHEETS_TestCvCL + CStr(ActiveCell.Row))
-        If InStr(currentCV, "CV-") Then
+        currentCV = "CV-" + CStr(Range(CVs_SHEETS_CvNumberCL + CStr(ActiveCell.Row)))
+        If Not IsEmpty(currentCV) Then
             overwriteAnswer = MsgBox("Are you sure you want to delete " + currentCV + "?", vbYesNo, "Delete Requirement!")
             If overwriteAnswer = vbYes Then
                 If SheetsList.Contains(currentCV) Then
@@ -56,7 +56,7 @@ Sub DeleteRequirement()
                 GenericFunctions.UnprotectSheet
                 ActiveWorkbook.Sheets("Trace").Rows(ActiveCell.Row).EntireRow.Delete
 
-                GenericFunctions.ProtectSheet(protectStatus)
+                GenericFunctions.ProtectSheet (protectStatus)
             End If
         End If
     End If
