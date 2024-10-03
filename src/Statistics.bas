@@ -17,6 +17,7 @@ Sub getTestStatistict()
     
     calcPrevStatus = Application.Calculation
     GenericFunctions.uiDisable
+    TestCases_StatusUpperCase
     For Each Worksheet In ActiveWorkbook.Worksheets
         If InStr(Worksheet.Name, "CV-") Then
             Worksheet.Activate
@@ -82,4 +83,11 @@ Sub getNotTestedCases(testList)
 End Sub
 
 
-
+Sub TestCases_StatusUpperCase()
+    ActiveWorkbook.Sheets("TestCases").Activate
+    For Each cell In Range("B2", "B" + CStr(lastRowNumber))
+        cell.value = UCase(cell.value)
+    Next
+    GenericFunctions.uiEnable (True)
+    GenericFunctions.uiDisable
+End Sub
