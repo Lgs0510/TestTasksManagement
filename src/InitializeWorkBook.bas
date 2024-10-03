@@ -4,7 +4,7 @@ Attribute VB_Name = "InitializeWorkBook"
 'Description: This function is responsible for .
 'Inputs:----
 '-----------------------------------------------------------------------------------
-Sub InitializeWorkBook()
+Function InitializeWorkBook() As Boolean
     'Constants based on the Trace tab
 
     Dim WS_Count As Integer
@@ -14,6 +14,7 @@ Sub InitializeWorkBook()
     Dim testCasesSheetCVs() As String
     Dim allTestsList As New list
     Dim calcPrevStatus As XlCalculation
+    Dim newSheetsCreated As Boolean
     
     calcPrevStatus = Application.Calculation
     GenericFunctions.uiDisable
@@ -51,7 +52,7 @@ Sub InitializeWorkBook()
     SheetsList.RemoveStr ("Trace")
     SheetsList.RemoveStr ("TestCases")
     SheetsList.RemoveStr ("Statistics")
-    createNewSheets sheetsToCreateList
+    newSheetsCreated = createNewSheets(sheetsToCreateList)
     For curRowNumber = 2 To 10000
         ActiveWorkbook.Worksheets("Trace").Activate
         If Not IsEmpty(Cells(curRowNumber, TRACE_CvNumberCN)) Then
@@ -88,10 +89,14 @@ Sub InitializeWorkBook()
         testCasesSheetCVs = readTestCasesSheet()
         A = updateTestCasesSheet_CvOnly(allTestsList, testCasesSheetCVs)
     End If
-    MsgBox "End of CV-Number Collumn"
-    
     GenericFunctions.uiEnable (calcPrevStatus)
-End Sub
+    If newSheetsCreated Then
+        MsgBox "Sheets created sucessfully"
+    Else
+        MsgBox "No sheet created"
+    End If
+    InitializeWorkBook = True
+End Function
 
 '--------------------------------------------------------
 '------------------ Public Subs -------------------
@@ -254,23 +259,27 @@ Sub closeSheetTemplate()
     VeryHiddenSheet ("Sample")
 End Sub
 
-Sub createNewSheets(currentCVNumber As list)
+Function createNewSheets(currentCVNumber As list) As Boolean
     On Error GoTo ErrorHandler
     
-    prepareSheetTemplate
-    For Each cv In currentCVNumber.getList
-        Set NewSheet = ActiveWorkbook.Worksheets.Add(After:=ActiveWorkbook.Worksheets(ActiveWorkbook.Worksheets.count))
-        NewSheet.Name = cv
-        applySheetTemplate (cv)
-    Next
-    closeSheetTemplate
-    
-    
-    Exit Sub
+    If Not (currentCVNumber Is Nothing) Then
+        If currentCVNumber.Size > 0 Then
+            prepareSheetTemplate
+            For Each cv In currentCVNumber.getList
+                Set NewSheet = ActiveWorkbook.Worksheets.Add(After:=ActiveWorkbook.Worksheets(ActiveWorkbook.Worksheets.count))
+                NewSheet.Name = cv
+                applySheetTemplate (cv)
+            Next
+            closeSheetTemplate
+            createNewSheets = True
+        End If
+    End If
+    createNewSheets = False
+    Exit Function
 ErrorHandler:
         MsgBox ("There is some sheet already named: " + cv + " Please delete/rename it and try again!")
     Resume Next
-End Sub
+End Function
 Function sheetExists(some_sheet As String) As Boolean
 
 On Error Resume Next
