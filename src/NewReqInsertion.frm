@@ -21,6 +21,8 @@ Attribute VB_Exposed = False
 
 
 
+
+
 '-----------------Button Insert Click (click event)------------------
 'Sub Name:btnInsertion_Click
 'Description: This Sub is called when the text box in import file prompt is clicked.
@@ -77,8 +79,8 @@ Private Sub btnInsertion_Click()
         Cells(rowToUpdate, TRACE_CvNumberCN).value = txtBoxCvNumber
     End If
     Cells(rowToUpdate, TRACE_LinkedWorkItemsCN).value = txtBoxLinkedWI
-    Cells(rowToUpdate, TRACE_WorkItemCN).Formula2R1C1Local = Trace_WorkItemFormula_00 & Trace_WorkItemFormula_01 & Trace_WorkItemFormula_02 & Trace_WorkItemFormula_03
-    Cells(rowToUpdate, TRACE_TestStatusCN).Formula2R1C1Local = Trace_TestStatusFormula_00 & Trace_TestStatusFormula_01 & Trace_TestStatusFormula_02 & Trace_TestStatusFormula_03 & Trace_TestStatusFormula_04
+    Cells(rowToUpdate, TRACE_WorkItemCN).Formula2R1C1 = Trace_WorkItemFormula_00 & Trace_WorkItemFormula_01 & Trace_WorkItemFormula_02 & Trace_WorkItemFormula_03
+    Cells(rowToUpdate, TRACE_TestStatusCN).Formula2R1C1 = Trace_TestStatusFormula_00 & Trace_TestStatusFormula_01 & Trace_TestStatusFormula_02 & Trace_TestStatusFormula_03 & Trace_TestStatusFormula_04
     GenericFunctions.ProtectSheet (protectStatus)
 
     InitializeWorkBook.InitializeWorkBook
