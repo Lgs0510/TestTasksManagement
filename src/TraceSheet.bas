@@ -34,30 +34,41 @@ End Function
 
 Sub DeleteRequirement()
     Dim overwriteAnswer As VbMsgBoxResult
-    Dim SheetsList As New list
-    Dim WS_Count As Integer
-    
+    Dim listToDelete As New list
+    Dim listOfDeletedCVs As New list
+
     protectStatus = ActiveSheet.ProtectContents
-    WS_Count = ActiveWorkbook.Worksheets.count
-
-    For curSheet = 1 To WS_Count
-        SheetsList.Add (ActiveWorkbook.Worksheets(curSheet).Name)
-    Next
-    If ActiveCell.Row > 1 Then
-        currentCV = "CV-" + CStr(Range(CVs_SHEETS_CvNumberCL + CStr(ActiveCell.Row)))
-        If Not IsEmpty(currentCV) Then
-            overwriteAnswer = MsgBox("Are you sure you want to delete " + currentCV + "?", vbYesNo, "Delete Requirement!")
-            If overwriteAnswer = vbYes Then
-                If SheetsList.Contains(currentCV) Then
-                    Application.DisplayAlerts = False
-                    ActiveWorkbook.Sheets(currentCV).Delete
-                    Application.DisplayAlerts = True
+    calcPrevStatus = Application.Calculation
+    
+    If ActiveSheet.Name = "Trace" Then
+        GenericFunctions.UnprotectSheet
+        GenericFunctions.uiDisable
+        For Each selCell In Selection
+            If Not listToDelete.Contains(selCell.Row) Then
+                currentCV = Cells(selCell.Row, 2).value
+                If deleteAllAnswer = 0 Then
+                    deleteAllAnswer = MsgBox("Do you want to delete all the selected requirements?", vbYesNo, "Delete Requirement!")
                 End If
-                GenericFunctions.UnprotectSheet
-                ActiveWorkbook.Sheets("Trace").Rows(ActiveCell.Row).EntireRow.Delete
-
-                GenericFunctions.ProtectSheet (protectStatus)
+                If deleteAllAnswer = vbNo Then
+                    deleteAnswer = MsgBox("Are you sure you want to delete " + currentCV + "?", vbYesNo, "Delete Requirement!")
+                End If
+                
+                If deleteAllAnswer = vbYes Or deleteAnswer = vbYes Then
+                        listToDelete.Add (selCell.Row)
+                        Debug.Print sheetExist(currentCV)
+                        If sheetExist(currentCV) Then
+                            Application.DisplayAlerts = False
+                            ActiveWorkbook.Sheets(currentCV).Delete
+                            Application.DisplayAlerts = True
+                        End If
+                End If
             End If
-        End If
+        Next
+        listToDelete.SortUpSideDown
+        For Each cellToDelete In listToDelete.getList
+            ActiveWorkbook.Sheets("Trace").Rows(cellToDelete).EntireRow.Delete
+        Next
+        GenericFunctions.ProtectSheet (protectStatus)
+        GenericFunctions.uiEnable (calcPrevStatus)
     End If
 End Sub

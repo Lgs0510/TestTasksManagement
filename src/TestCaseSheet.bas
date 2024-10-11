@@ -198,35 +198,33 @@ End Sub
 Public Sub deleteTestCases()
     Dim deleteAnswer As VbMsgBoxResult
     Dim listToDelete As New list
-    Dim listToKeep As New list
     Dim listOfDeletedCVs As New list
 
 
     protectStatus = ActiveSheet.ProtectContents
+    calcPrevStatus = Application.Calculation
     If ActiveSheet.Name = "TestCases" Then
-        For Each Line In Selection
-            If Line.Column = 1 Then
-                deleteAnswer = MsgBox("Are you sure you want to delete " + Line.value + "?", vbYesNo, "Delete Test Cases?")
-                If deleteAnswer = vbYes Then
-                    listToDelete.Add (Line.Row)
-                    listOfDeletedCVs.Add (Line.value)
-                Else
-                    listToKeep.Add (Line.Row)
-                End If
+        deleteAnswer = MsgBox("Are you sure you want to delete the selected TestCases?", vbYesNo, "Delete Test Cases?")
+        For Each selCell In Selection
+            If Not listToDelete.Contains(selCell.Row) Then
+                listToDelete.Add (selCell.Row)
+                listOfDeletedCVs.Add (selCell.value)
             End If
         Next
         If listToDelete.Size > 0 Then
             listToDelete.SortUpSideDown
             GenericFunctions.UnprotectSheet
-            For Each Line In listToDelete.getList
-                If Line > 0 Then
-                    Range("A" + Line).EntireRow.Delete
+            GenericFunctions.uiDisable
+            For Each selCell In listToDelete.getList
+                If selCell > 0 Then
+                    Range("A" + selCell).EntireRow.Delete
                 End If
             Next
-            GenericFunctions.ProtectSheet(protectStatus)
+            GenericFunctions.ProtectSheet (protectStatus)
 
             updateNewCVsFormulas
             removeTestCasesCVs listOfDeletedCVs.getList
+            GenericFunctions.uiEnable (calcPrevStatus)
         End If
     End If
 End Sub
