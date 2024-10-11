@@ -96,16 +96,10 @@ End Sub
 'Description: This function is responsible for
 'Inputs: prsheetName: string with the name of the Sheet in question
 '-----------------------------------------------------------------------------------
-Public Function sheetExist(sheetName As String) As Boolean
+Public Function sheetExist(ByVal sheetName As String) As Boolean
     On Error Resume Next
-    
-     ActiveWorkbook.Worksheets(sheetName).Select
-    If Err = 0 Then
-        sheetExist = True
-    Else
-        Err.Clear
-        sheetExist = False
-    End If
+
+    sheetExist = (ActiveWorkbook.Sheets(sheetName).index > 0)
 End Function
 
 
