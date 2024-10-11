@@ -280,12 +280,6 @@ ErrorHandler:
         MsgBox ("There is some sheet already named: " + cv + " Please delete/rename it and try again!")
     Resume Next
 End Function
-Function sheetExists(some_sheet As String) As Boolean
-
-On Error Resume Next
-sheetExists = (ActiveWorkbook.Sheets(some_sheet).index > 0)
-
-End Function
 
 Sub deleteAllSheets()
     Dim overwriteAnswer As VbMsgBoxResult
