@@ -90,3 +90,11 @@ Private Sub btnInsertion_Click()
     Unload Me
 End Sub
 
+Private Sub txtBoxCvNumber_Change()
+    If Not IsNumeric(txtBoxCvNumber) Then
+        If Len(txtBoxCvNumber) > 0 Then
+            MsgBox ("CV Number invalid! Only numbers!")
+            txtBoxCvNumber = Left(txtBoxCvNumber.value, txtBoxCvNumber.TextLength - 1)
+        End If
+    End If
+End Sub

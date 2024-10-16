@@ -231,7 +231,8 @@ End Sub
 'Inputs: ---
 '-----------------------------------------------------------------------------------
 Private Sub txtBoxCvNumber_Change()
-    curTest.cvNumber = "CV-" + txtBoxCvNumber
+    'curTest.cvNumber = "CV-" + txtBoxCvNumber
+    curTest.cvNumber = txtBoxCvNumber
     updateListBoxLine
 End Sub
 
@@ -244,7 +245,8 @@ End Sub
 '-----------------------------------------------------------------------------------
 Private Sub txtBoxOldCvNumber_Change()
     If txtBoxOldCvNumber <> "" Then
-        curTest.cvOld = "CV-" + txtBoxOldCvNumber
+        'curTest.cvOld = "CV-" + txtBoxOldCvNumber
+        curTest.cvOld = txtBoxOldCvNumber
         updateListBoxLine
     End If
 End Sub

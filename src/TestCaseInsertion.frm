@@ -64,9 +64,9 @@ Private Sub btnInsertion_Click()
     curReqList.letList = testCasesArray
 
     Cells(selectedRow, 1).Select
-    If curReqList.Contains("CV-" + txtBoxCvNumber) Then
-        If IsEmpty(Cells(selectedRow, TESTCASES_WorkItemCN)) Or (StrComp("CV-" + txtBoxCvNumber, Cells(selectedRow, TESTCASES_WorkItemCN).value) <> 0) Then
-            MsgBox "This requirement is already on the list!      Line: " + CStr(curReqList.Find("CV-" + txtBoxCvNumber) + 2)
+    If curReqList.Contains(txtBoxCvNumber) Then
+        If IsEmpty(Cells(selectedRow, TESTCASES_WorkItemCN)) Or (StrComp(txtBoxCvNumber, Cells(selectedRow, TESTCASES_WorkItemCN).value) <> 0) Then
+            MsgBox "This requirement is already on the list!      Line: " + CStr(curReqList.Find(txtBoxCvNumber) + 2)
             Exit Sub
         End If
     ElseIf Not IsEmpty(Cells(selectedRow, TESTCASES_WorkItemCN)) Then
@@ -79,9 +79,9 @@ Private Sub btnInsertion_Click()
     End If
     calcPrevStatus = Application.Calculation
     GenericFunctions.UnprotectSheet
-    Cells(selectedRow, TESTCASES_WorkItemCN) = "CV-" + txtBoxCvNumber
+    Cells(selectedRow, TESTCASES_WorkItemCN) = CLngLng(txtBoxCvNumber)
     If Len(txtBoxOldCvNumber) > 0 Then
-        Cells(selectedRow, TESTCASES_OldCvCN) = "CV-" + txtBoxOldCvNumber
+        Cells(selectedRow, TESTCASES_OldCvCN) = CLngLng(txtBoxOldCvNumber)
     End If
     
     Select Case btnTestResult
@@ -97,9 +97,9 @@ Private Sub btnInsertion_Click()
 
     GenericFunctions.ProtectSheet (protectionStatus)
         
-    testCaseCv.cvNumber = "CV-" + txtBoxCvNumber
+    testCaseCv.cvNumber = txtBoxCvNumber
     If Len(txtBoxOldCvNumber) > 0 Then
-        testCaseCv.cvOld = "CV-" + txtBoxOldCvNumber
+        testCaseCv.cvOld = txtBoxOldCvNumber
     Else
         testCaseCv.cvOld = ""
     End If
@@ -126,6 +126,24 @@ Private Sub btnTestResult_Change()
     End If
 End Sub
 
+
+Private Sub txtBoxCvNumber_Change()
+    If Not IsNumeric(txtBoxCvNumber) Then
+        If Len(txtBoxCvNumber) > 0 Then
+            MsgBox ("CV Number invalid! Only numbers!")
+            txtBoxCvNumber = Left(txtBoxCvNumber.value, txtBoxCvNumber.TextLength - 1)
+        End If
+    End If
+End Sub
+
+Private Sub txtBoxOldCvNumber_Change()
+    If Not IsNumeric(txtBoxOldCvNumber) Then
+        If Len(txtBoxOldCvNumber) > 0 Then
+            MsgBox ("CV Number invalid! Only numbers!")
+            txtBoxOldCvNumber = Left(txtBoxOldCvNumber.value, txtBoxOldCvNumber.TextLength - 1)
+        End If
+    End If
+End Sub
 
 Private Sub UserForm_Initialize()
     txtBoxCvNumber = Cells(Selection.Row, 1)
