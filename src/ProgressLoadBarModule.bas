@@ -24,19 +24,32 @@ Public Sub ProgressLoad(ByVal curValue As Integer, ByVal maxValue As Integer, By
     ActiveWorkbook.Sheets("TestCases").ProgressBarLoad.value = previousProgress
     ActiveWorkbook.Sheets("TestCases").ProgressBar_percentage.Text = CStr(previousProgress) + "%"
 End Sub
-
 Public Sub closeProgressBar()
+
     previousProgress = 0
-    ActiveWorkbook.Sheets("TestCases").ProgressBarLoad.Visible = False
-    ActiveWorkbook.Sheets("TestCases").ProgressBar_Label.Visible = False
-    ActiveWorkbook.Sheets("TestCases").ProgressBar_percentage.Visible = False
+    hideProgressBar
     ProgressBarStatus = False
+    ActiveWorkbook.AutoSaveOn = True
+End Sub
+
+Public Sub hideProgressBar()
+    If ActiveWorkbook.Sheets("TestCases").ProgressBarLoad.Visible Then
+        ActiveWorkbook.Sheets("TestCases").ProgressBarLoad.Visible = False
+    End If
     
+    If ActiveWorkbook.Sheets("TestCases").ProgressBar_Label.Visible Then
+        ActiveWorkbook.Sheets("TestCases").ProgressBar_Label.Visible = False
+    End If
+    
+    If ActiveWorkbook.Sheets("TestCases").ProgressBar_percentage.Visible Then
+        ActiveWorkbook.Sheets("TestCases").ProgressBar_percentage.Visible = False
+    End If
 End Sub
 
 
 Private Sub openProgressBar(barLabel As String)
-        
+        ActiveWorkbook.AutoSaveOn = False
+        DoEvents
         GenericFunctions.UnprotectSheet
         Application.ScreenUpdating = True
         ActiveSheet.Range("A2").Activate

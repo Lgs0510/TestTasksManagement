@@ -80,7 +80,6 @@ Private Function readScriptFolder(testCasesDic As Dictionary) As Boolean
             ProgressLoadBarModule.ProgressLoad curValue:=numberOfScripts, maxValue:=objFolder.Files.count, progressLabel:="Updating scripts list.... gathering scripts"
         End If
     Next
-    ProgressLoadBarModule.closeProgressBar
     readScriptFolder = True
 End Function
 
@@ -98,7 +97,6 @@ Private Sub checkCurrentMappedTestCases(ByRef testCasesDic As Dictionary)
         End If
         ProgressLoadBarModule.ProgressLoad curValue:=curRowNumber, maxValue:=totalTestCases, progressLabel:="Updating scripts names"
     Next
-    ProgressLoadBarModule.closeProgressBar
 End Sub
 
 Private Sub insertNewTestCases(ByRef testCasesDic As Dictionary)
@@ -116,5 +114,4 @@ Private Sub insertNewTestCases(ByRef testCasesDic As Dictionary)
             ProgressLoadBarModule.ProgressLoad curValue:=addedAmountTestCases, maxValue:=remainingAmountTestCases, progressLabel:="Adding missing Test Cases"
         Next
     End If
-    ProgressLoadBarModule.closeProgressBar
 End Sub
