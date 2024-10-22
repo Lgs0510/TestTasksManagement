@@ -185,7 +185,7 @@ Private Function ReadLinkedTests(ByVal celVal As String) As String()
             While (Not IsNumeric(Mid(auxArray(1), cvLinePos + 2 + cvNumberLenght, 1))) And (cvNumberLenght > 0)
                 cvNumberLenght = cvNumberLenght - 1
             Wend
-            testsList(j) = Mid(auxArray(1), cvLinePos, cvNumberLenght + 3)
+            testsList(j) = Replace(Mid(auxArray(1), cvLinePos, cvNumberLenght + 3), "CV-", "")
             j = j + 1
         End If
     Next i
@@ -215,7 +215,8 @@ Sub fillTestCases(TestCasesList)
     cell = ActiveSheet.Cells(cellCounter + 1, 1).Address(False, False)
     Range("A3", cell).Select
     ActiveSheet.Paste
-    
+    Range("B:B").NumberFormat = "CV-#"
+    Range("D:E").NumberFormat = "CV-#"
     Range("C2:F2").Select
     Range("C2:F2").Copy
     cell = ActiveSheet.Cells(cellCounter + 2, 6).Address(False, False)

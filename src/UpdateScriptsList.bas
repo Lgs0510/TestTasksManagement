@@ -69,7 +69,7 @@ Private Function readScriptFolder(testCasesDic As Dictionary) As Boolean
                         cvNumberLenght = cvNumberLenght - 1
                     Wend
                     If cvNumberLenght > 0 Then
-                        scriptNameArray.cvNumber = Mid(strLine, cvLinePos, cvNumberLenght + 3)
+                        scriptNameArray.cvNumber = Replace(Mid(strLine, cvLinePos, cvNumberLenght + 3), "CV-", "")
                         scriptNameArray.ScriptName = objFile.Name
                         If Not testCasesDic.Exists(scriptNameArray.cvNumber) Then
                             testCasesDic(scriptNameArray.cvNumber) = scriptNameArray.ScriptName
@@ -89,7 +89,7 @@ Private Sub checkCurrentMappedTestCases(ByRef testCasesDic As Dictionary)
     
     For curRowNumber = 2 To lastRowWithCVs
         If Not IsEmpty(Cells(curRowNumber, TESTCASES_WorkItemCN)) Then
-            curReqToSearch = Cells(curRowNumber, TESTCASES_WorkItemCN)
+            curReqToSearch = CStr(Cells(curRowNumber, TESTCASES_WorkItemCN))
             If testCasesDic.Exists(curReqToSearch) Then
                 Cells(curRowNumber, TESTCASES_ScriptNameCN) = testCasesDic(curReqToSearch)
                 testCasesDic.Remove (curReqToSearch)
