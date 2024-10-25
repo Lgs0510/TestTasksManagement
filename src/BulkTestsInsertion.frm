@@ -22,6 +22,7 @@ Attribute VB_Exposed = False
 
 
 
+
 '----------------- Public Local Variables----------------
 Dim firstKeyPress As Boolean
 Dim testsList() As String
@@ -31,6 +32,24 @@ Dim curTest As New TestCaseObj
 '----------------- Private Subs  EVENTs -----------------
 '--------------------------------------------------------
 
+
+Private Sub AllOk_btn_Click()
+    If AllOk_btn Then
+        setVal = "OK"
+        AllOk_btn.BackColor = &H80FF80
+    Else
+        setVal = ""
+        AllOk_btn.BackColor = &HE0E0E0
+    End If
+    testsListBox.ListIndex = 1
+    testsListBox.SetFocus
+    For i = 1 To testsListBox.ListCount - 1
+        currentIndex = i
+        loadListBoxLine
+        curTest.testStatus = setVal
+        updateListBoxLine
+    Next
+End Sub
 
 '----------Bulk Test Insertion Text Box double Click(double click event)------------
 'Sub Name:BulkTestsInsertion_txtBox_DblClick
@@ -64,6 +83,8 @@ End Sub
 'Inputs: ---
 '-----------------------------------------------------------------------------------
 Private Sub MultiPage1_Change()
+    Me.testsListBox.RowSource = ""
+    On Error Resume Next
     If MultiPage1.value = 1 Then
         testsListBox.list = testsList
         For cell = 1 To SizeOfArray(testsListBox.list) - 1
@@ -79,7 +100,7 @@ End Sub
 'Inputs: ---
 '-----------------------------------------------------------------------------------
 Private Sub Page2_Add_btn_Click()
-    Dim allTestsList As New TestCasesList
+    Dim allTestsDict As New Dictionary
     Dim testsArray() As New TestCaseObj
     Dim i As Integer
     Dim testCasesSheetCVs() As String
@@ -90,21 +111,24 @@ Private Sub Page2_Add_btn_Click()
 
     ReDim testsArray(0 To SizeOfArray(testsList) - 2)
     For i = 0 To SizeOfArray(testsArray) - 1
-        testsArray(i).cvNumber = testsList(i + 1, 0)
+        testsArray(i).cvNumber = Replace(testsList(i + 1, 0), "CV-", "")
         testsArray(i).testStatus = testsList(i + 1, 1)
-        testsArray(i).cvOld = testsList(i + 1, 2)
+        testsArray(i).cvOld = Replace(testsList(i + 1, 2), "CV-", "")
     Next
-    allTestsList.letArray = testsArray
-    allTestsList.RemoveDuplicates
-    If allTestsList.Size < 1 Then
-        MsgBox "No new CV to add, perhaps they are already on the TestCases sheet."
-        Exit Sub
+    For Each cv In testsArray
+        Set allTestsDict(cv.cvNumber) = cv
+    Next
+
+    If allTestsDict.count > 0 Then
+        testCasesSheetCVs = readTestCasesSheet()
+        addedCVs = updateTestCasesSheet(allTestsDict, testCasesSheetCVs)
+        If addedCVs > 0 Then
+            updateTestCasesCVs allTestsDict
+        End If
     End If
-    testCasesSheetCVs = readTestCasesSheet()
-    A = updateTestCasesSheet(allTestsList, testCasesSheetCVs)
-    updateTestCasesCVs allTestsList
+
     
-    GenericFunctions.uiEnable(calcPrevStatus)
+    GenericFunctions.uiEnable (calcPrevStatus)
     Unload Me
 End Sub
 
@@ -123,7 +147,7 @@ End Sub
 '-----------------------Test Insertion OK Button Click(click event)-----------------
 'Sub Name:TestInsertionOK_btn_Click
 'Description: This Sub is called when the OK button in page 1 of multipage object is clicked. It will process the user input
-'             in the text box to create a list with every inserted CV number and change the multipage object to page 1.
+'             in the text box to create a list with every inserted CV number and change the multipage object to page 2.
 'Inputs: ---
 '-----------------------------------------------------------------------------------
 Private Sub TestInsertionOK_btn_Click()
@@ -173,18 +197,24 @@ End Sub
 'Inputs: ---
 '-----------------------------------------------------------------------------------
 Private Sub testsListBox_Click()
-    If currentIndex <> testsListBox.ListIndex Then
-        currentIndex = testsListBox.ListIndex
-        curTest.letTestCase = loadListBoxLine()
-        Application.EnableEvents = False
-        txtBoxCvNumber = Mid(curTest.cvNumber, 4, Len(curTest.cvNumber) - 3)
-        If Len(curTest.cvOld) > 3 Then
-            txtBoxOldCvNumber = Mid(curTest.cvOld, 4, Len(curTest.cvOld) - 3)
-        Else
-            txtBoxOldCvNumber = ""
+    If testsListBox.ListIndex > 0 Then
+        If currentIndex <> testsListBox.ListIndex Then
+            currentIndex = testsListBox.ListIndex
+            curTest.letTestCase = loadListBoxLine()
+            Application.EnableEvents = False
+            txtBoxCvNumber = Mid(curTest.cvNumber, 4, Len(curTest.cvNumber) - 3)
+            If Len(curTest.cvOld) > 3 Then
+                txtBoxOldCvNumber = Mid(curTest.cvOld, 4, Len(curTest.cvOld) - 3)
+            Else
+                txtBoxOldCvNumber = ""
+            End If
+            TestsResultStatus_btn = convTestStatus(curTest.testStatus)
+            Application.EnableEvents = True
         End If
-        TestsResultStatus_btn = convTestStatus(curTest.testStatus)
-        Application.EnableEvents = True
+    Else
+        txtBoxCvNumber = ""
+        txtBoxOldCvNumber = ""
+        TestsResultStatus_btn = ""
     End If
 End Sub
 
@@ -231,8 +261,7 @@ End Sub
 'Inputs: ---
 '-----------------------------------------------------------------------------------
 Private Sub txtBoxCvNumber_Change()
-    'curTest.cvNumber = "CV-" + txtBoxCvNumber
-    curTest.cvNumber = txtBoxCvNumber
+    curTest.cvNumber = "CV-" + txtBoxCvNumber
     updateListBoxLine
 End Sub
 
@@ -245,9 +274,16 @@ End Sub
 '-----------------------------------------------------------------------------------
 Private Sub txtBoxOldCvNumber_Change()
     If txtBoxOldCvNumber <> "" Then
-        'curTest.cvOld = "CV-" + txtBoxOldCvNumber
         curTest.cvOld = txtBoxOldCvNumber
         updateListBoxLine
+    End If
+End Sub
+
+Private Sub UserForm_Activate()
+    If ActiveSheet.Name <> "TestCases" Then
+        MsgBox ("Insert Of Test Cases can only work at the TestCase sheet!")
+        Unload Me
+        Exit Sub
     End If
 End Sub
 
@@ -298,11 +334,16 @@ End Sub
 'Inputs: ---
 '-----------------------------------------------------------------------------------
 Private Sub updateListBoxLine()
-    If curTest.cvNumber <> "" Then
-        testsList(currentIndex, 0) = curTest.cvNumber
-    End If
-    If curTest.cvOld <> "" Then
-        testsList(currentIndex, 2) = curTest.cvOld
+    If currentIndex <> 0 Then
+        If curTest.cvNumber <> "" Then
+            testsList(currentIndex, 0) = curTest.cvNumber
+        End If
+        If curTest.cvOld <> "" Then
+            testsList(currentIndex, 2) = curTest.cvOld
+        End If
+    Else
+        testsList(currentIndex, 0) = "TestCase"
+        testsList(currentIndex, 2) = "Old CV"
     End If
     testsList(currentIndex, 1) = curTest.testStatus
     MultiPage1_Change
