@@ -13,41 +13,41 @@ Attribute VB_Name = "TestCaseSheet"
 'Inputs: newTestCasesList: list class containing all the new CVs to add to the TestCases sheet;
 'Outputs: testCasesSheetList: string array containing all the old CVs in the TestCases sheet;
 '--------------------------------------------------------------------------------------------
-Public Function updateTestCasesSheet_CvOnly(newTestCasesList As list, testCasesSheetList() As String)
-    Dim tCSLcopy As New list
+Public Function updateTestCasesSheet_CvOnly(newTestCases As Dictionary, testCasesSheetList() As String)
+    Dim tCSLcopy As New Dictionary
     Dim cvSpaceless As String
     
     protectStatus = ActiveSheet.ProtectContents
-    If IsNull(newTestCasesList) Or newTestCasesList.Size <= 0 Then
+    If IsNull(newTestCases) Or newTestCases.count = 0 Then
         Exit Function
     End If
     If Not IsNull(testCasesSheetList) Then
-        tCSLcopy.letList = testCasesSheetList
+        For Each testCase In testCasesSheetList
+            tCSLcopy(testCase) = ""
+        Next
     End If
     
-    If newTestCasesList.Size > 0 Then
-        If tCSLcopy.Size > 0 Then
-            For Each cv In newTestCasesList.getList
-                If tCSLcopy.Contains(cv) Then
-                    index = newTestCasesList.Find(cv)
-                    If Not IsNull(index) Then
-                        newTestCasesList.Remove (index)
-                    End If
+    If newTestCases.count > 0 Then
+        If tCSLcopy.count > 0 Then
+            For Each cv In newTestCases.Keys
+                If tCSLcopy.Exists(cv) Then
+                    newTestCases.Remove (cv)
                 End If
-                If newTestCasesList.Size < 1 Then
+                If newTestCases.count < 1 Then
                     Exit Function
                 End If
             Next
+            
         End If
-        newTestCasesList.Sort
+        
         currentSheetName = ActiveSheet.Name
         ActiveWorkbook.Worksheets("TestCases").Activate
-        lastCellAddress = "A" + CStr(tCSLcopy.Size + 2) + ":A" + CStr(tCSLcopy.Size + 1 + newTestCasesList.Size)
+        lastCellAddress = "A" + CStr(tCSLcopy.count + 2) + ":A" + CStr(tCSLcopy.count + 1 + newTestCases.count)
         Range(lastCellAddress).Select
         
         GenericFunctions.UnprotectSheet
 
-        Range(lastCellAddress).value = Application.Transpose(newTestCasesList.getList)
+        Range(lastCellAddress).value = Application.Transpose(newTestCases.Keys)
         
         GenericFunctions.ProtectSheet(protectStatus)
 
@@ -64,41 +64,46 @@ End Function
 'Inputs: newTestCasesList: list class containing all the new CVs to add to the TestCases sheet;
 'Inputs: testCasesSheetList: string array containing all the old CVs in the TestCases sheet;
 '-----------------------------------------------------------------------------------
-Public Function updateTestCasesSheet(newTestCasesList As TestCasesList, testCasesSheetList() As String)
-    Dim tCSLcopy As New list
+Public Function updateTestCasesSheet(newTestCaseDic As Dictionary, testCasesSheetList() As String) As Integer
+    Dim tCSLcopy As New Dictionary
+    Dim existingCVs As String
     Dim cvSpaceless As String
         
     protectStatus = ActiveSheet.ProtectContents
 
-    If IsNull(newTestCasesList) Or newTestCasesList.Size <= 0 Then
+    If IsNull(newTestCaseDic) Or newTestCaseDic.count <= 0 Then
         Exit Function
     End If
     If Not IsNull(testCasesSheetList) Then
-        tCSLcopy.letList = testCasesSheetList
+        For Each testCase In testCasesSheetList
+            tCSLcopy(testCase) = ""
+        Next
     End If
-    
-    If newTestCasesList.Size > 0 Then
-        If tCSLcopy.Size > 0 Then
-            For Each cv In newTestCasesList.getArray
-                If tCSLcopy.Contains(cv.cvNumber) Then
-                    index = newTestCasesList.Find(cv.cvNumber)
-                    If Not IsNull(index) Then
-                        newTestCasesList.Remove (index)
-                    End If
+    existingCVs = ""
+    If newTestCaseDic.count > 0 Then
+        If tCSLcopy.count > 0 Then
+            For Each cv In newTestCaseDic.Keys
+                If tCSLcopy.Exists(cv) Then
+                    newTestCaseDic.Remove (cv)
+                    existingCVs = existingCVs + "CV-" + cv & vbCrLf
                 End If
-                If newTestCasesList.Size < 1 Then
+                If newTestCaseDic.count < 1 Then
+                    MsgBox ("All inserted CVs already exist on the sheet!")
+                    updateTestCasesSheet = 0
                     Exit Function
                 End If
             Next
         End If
-        newTestCasesList.Sort
+        If Len(existingCVs) > 0 Then
+            MsgBox ("The following CVs already exist on the sheet:" & vbCrLf & existingCVs)
+        End If
         currentSheetName = ActiveSheet.Name
         ActiveWorkbook.Worksheets("TestCases").Activate
-        lastCellAddress = "A" + CStr(tCSLcopy.Size + 2)
+        lastCellAddress = "A" + CStr(tCSLcopy.count + 2)
         Range(lastCellAddress).Select
         
         GenericFunctions.UnprotectSheet
-        For Each cv In newTestCasesList.getArray
+        For Each cv In newTestCaseDic.Items
             ActiveCell.value = cv.cvNumber
             ActiveCell.Offset(0, 1).Select
             ActiveCell.value = CV.testStatus
@@ -107,9 +112,12 @@ Public Function updateTestCasesSheet(newTestCasesList As TestCasesList, testCase
             ActiveCell.Offset(1, -2).Select
         Next
         
-        GenericFunctions.ProtectSheet(protectStatus)
+        Range("A:A").NumberFormat = "CV-#"
+        Range("C:D").NumberFormat = "CV-#"
+        GenericFunctions.ProtectSheet (protectStatus)
 
         updateNewCVsFormulas
+        updateTestCasesSheet = newTestCaseDic.count
     End If
 End Function
 
@@ -158,16 +166,26 @@ End Function
 '-----------------------------------------------------------------------------------
 Public Sub updateTestCasesCVs(newTestCvsList)
     Dim testList As New TestCasesList
+    Dim oldCvDict As New Dictionary
     Dim isSingleUpdate As Boolean
     Dim index As Integer
     Dim cellCvNumber As String
+    Dim testObj As TestCaseObj
     
      If StrComp(TypeName(newTestCvsList), "TestCaseObj", vbTextCompare) = 0 Then
         isSingleUpdate = True
     Else
         isSingleUpdate = False
+        For Each cv In newTestCvsList.Keys
+            Set testObj = newTestCvsList(cv)
+            If testObj.cvOld <> "" Then
+                If oldCvDict.Exists(testObj.cvOld) Then
+                    oldCvDict(testObj.cvOld) = cv
+                End If
+            End If
+        Next
      End If
-    
+
     For Each curSheet In ActiveWorkbook.Sheets
         If StrComp(Left(curSheet.Name, 3), "CV-", vbTextCompare) = 0 Then
             LastRow = curSheet.Range("A" & curSheet.Rows.count).End(xlUp).Row
@@ -178,9 +196,8 @@ Public Sub updateTestCasesCVs(newTestCvsList)
                         curSheet.Range(cell.Address).value = newTestCvsList.cvNumber
                     End If
                 Else
-                    index = newTestCvsList.FindOldCv(cellCvNumber)  '------- testList is saved as CV-xxxx remove all CVs or insert them all
-                    If index >= 0 Then
-                       curSheet.Range(cell.Address).value = newTestCvsList.GetCV(index)
+                    If oldCvDict.Exists(CStr(cellCvNumber)) Then
+                        curSheet.Range(cell.Address).value = oldCvDict(oldCvDict)
                     End If
                 End If
             Next
@@ -237,7 +254,7 @@ End Sub
 
 '------------------------------Remove Test Cases CVs------------------------------
 'Function Name:removeTestCasesCVs
-'Description: This function is responsible for look for all the Test Cases, from received list, 
+'Description: This function is responsible for look for all the Test Cases, from received list,
 '              present in all sheets and remove them.
 'Inputs: testList - list(list) with all cvs that must get removed.
 '-----------------------------------------------------------------------------------
@@ -271,5 +288,5 @@ Sub updateNewCVsFormulas()
         Range("D2").Copy
         Range("D3:D" + CStr(lastRowNumber + 1000)).PasteSpecial
         
-        GenericFunctions.ProtectSheet(protectStatus)
+        GenericFunctions.ProtectSheet (protectStatus)
 End Sub

@@ -13,7 +13,7 @@ Sub UpdateOldCvWithNewCv()
             For iRow = 2 To numberOfRows
                 Range(CVs_SHEETS_NewCvCL + CStr(iRow)).Select
                 If ActiveCell.value <> "" Then
-                    If InStr(ActiveCell.value, "CV-") Then
+                    If (ActiveCell.value <> "") Then
                         Range(CVs_SHEETS_TestCvCL + CStr(iRow)).value = Range(CVs_SHEETS_NewCvCL + CStr(iRow)).value
                     End If
                 ElseIf statusToDelete.Contains(Range(CVs_SHEETS_StatusCL + CStr(iRow)).value) Then
@@ -24,7 +24,7 @@ Sub UpdateOldCvWithNewCv()
         End If
     Next
 
-    GenericFunctions.uiEnable(calcPrevStatus)
+    GenericFunctions.uiEnable (calcPrevStatus)
 End Sub
 
 

@@ -12,7 +12,7 @@ Function InitializeWorkBook() As Boolean
     Dim SheetsList As New list, sheetsToCreateList As New list
     Dim linkedReqs As Variant, linkedTests() As String
     Dim testCasesSheetCVs() As String
-    Dim allTestsList As New list
+    Dim allTestsList As New Dictionary
     Dim calcPrevStatus As XlCalculation
     Dim newSheetsCreated As Boolean
     
@@ -74,7 +74,9 @@ Function InitializeWorkBook() As Boolean
                             End If
                         End If
                         If arrayEmptyCheck(linkedTests) = 0 Then
-                            allTestsList.AddArray (linkedTests)
+                            For Each Test In linkedTests
+                                allTestsList(Test) = ""
+                            Next
                         End If
                     End If
                 End If
@@ -83,9 +85,7 @@ Function InitializeWorkBook() As Boolean
             Exit For
         End If
     Next
-    If allTestsList.Size > 0 Then
-        allTestsList.Sort
-        allTestsList.RemoveDuplicates
+    If allTestsList.count > 0 Then
         testCasesSheetCVs = readTestCasesSheet()
         A = updateTestCasesSheet_CvOnly(allTestsList, testCasesSheetCVs)
     End If
@@ -263,6 +263,7 @@ End Sub
 Function createNewSheets(currentCVNumber As list) As Boolean
     On Error GoTo ErrorHandler
     
+    createNewSheets = False
     If Not (currentCVNumber Is Nothing) Then
         If currentCVNumber.Size > 0 Then
             prepareSheetTemplate
@@ -275,7 +276,6 @@ Function createNewSheets(currentCVNumber As list) As Boolean
             createNewSheets = True
         End If
     End If
-    createNewSheets = False
     Exit Function
 ErrorHandler:
         MsgBox ("There is some sheet already named: " + cv + " Please delete/rename it and try again!")
