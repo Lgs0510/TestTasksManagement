@@ -39,7 +39,10 @@ Sub DeleteRequirement()
 
     protectStatus = ActiveSheet.ProtectContents
     calcPrevStatus = Application.Calculation
-    
+    If ActiveSheet.Name <> "Trace" Then
+        MsgBox ("Delete Requirements can only delete CVs at the TRACE sheet!")
+        Exit Sub
+    End If
     If ActiveSheet.Name = "Trace" Then
         GenericFunctions.UnprotectSheet
         GenericFunctions.uiDisable

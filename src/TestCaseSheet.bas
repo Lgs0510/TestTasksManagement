@@ -200,6 +200,10 @@ Public Sub deleteTestCases()
     Dim listToDelete As New list
     Dim listOfDeletedCVs As New list
 
+    If ActiveSheet.Name <> "TestCases" Then
+        MsgBox ("Delete Test Cases can only delete CVs at the TestCases sheet!")
+        Exit Sub
+    End If
 
     protectStatus = ActiveSheet.ProtectContents
     calcPrevStatus = Application.Calculation

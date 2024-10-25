@@ -98,3 +98,16 @@ Private Sub txtBoxCvNumber_Change()
         End If
     End If
 End Sub
+
+Private Sub UserForm_Activate()
+    If ActiveSheet.Name <> "Trace" Then
+        MsgBox ("New Requirements will only work at the TRACE sheet!")
+        Unload Me
+        Exit Sub
+    End If
+End Sub
+
+Private Sub UserForm_Click()
+
+End Sub
+

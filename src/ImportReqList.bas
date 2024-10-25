@@ -23,6 +23,10 @@ Sub ImportMainReqs()
     Dim overwriteAllAnswer As VbMsgBoxResult
     Dim calcPrevStatus As XlCalculation
 
+    If ActiveSheet.Name <> "Trace" Then
+        MsgBox ("Import CSV will only work at the TRACE sheet!")
+        Exit Sub
+    End If
     GenericFunctions.uiDisable
     protectStatus = ActiveSheet.ProtectContents
     Set csvReqs = ImportCsvRequirements
@@ -31,7 +35,6 @@ Sub ImportMainReqs()
     End If
     LastRow = lastRowNumber
     curTraceReqlist.letList = readTraceSheetReqs
-    curTraceReqlist.Sort
     For Each req In csvReqs.getReqListNO
         calcPrevStatus = Application.Calculation
         GenericFunctions.UnprotectSheet

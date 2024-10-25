@@ -16,6 +16,10 @@ Sub UpdateScriptsList()
     Dim calcPrevStatus As XlCalculation
     Dim debugList As New list
     
+    If ActiveSheet.Name <> "TestCases" Then
+        MsgBox ("Update Script List will only work at the TestCases sheet!")
+        Exit Sub
+    End If
     calcPrevStatus = Application.Calculation
     GenericFunctions.uiDisable
     
